@@ -99,7 +99,7 @@ export default function Page() {
                 "apy_estimate": 12.5,
                 "min_stake": 100,
                 "investors_count": 23,
-                "risk_level": "Low",
+                "risk_level": "Low" as const,
                 "liquidity_locked_until": "2025-10-30"
               },
               "ai_yield_prediction": {
@@ -125,7 +125,7 @@ export default function Page() {
                 "apy_estimate": 15.2,
                 "min_stake": 50,
                 "investors_count": 18,
-                "risk_level": "Medium",
+                "risk_level": "Medium" as const,
                 "liquidity_locked_until": "2025-10-30"
               },
               "ai_yield_prediction": {
@@ -151,7 +151,7 @@ export default function Page() {
                 "apy_estimate": 18.7,
                 "min_stake": 75,
                 "investors_count": 15,
-                "risk_level": "High",
+                "risk_level": "High" as const,
                 "liquidity_locked_until": "2025-10-10"
               },
               "ai_yield_prediction": {
@@ -177,7 +177,7 @@ export default function Page() {
                 "apy_estimate": 11.8,
                 "min_stake": 100,
                 "investors_count": 8,
-                "risk_level": "Low",
+                "risk_level": "Low" as const,
                 "liquidity_locked_until": "2025-09-30"
               },
               "ai_yield_prediction": {
@@ -203,7 +203,7 @@ export default function Page() {
                 "apy_estimate": 14.3,
                 "min_stake": 50,
                 "investors_count": 21,
-                "risk_level": "Medium",
+                "risk_level": "Medium" as const,
                 "liquidity_locked_until": "2025-09-30"
               },
               "ai_yield_prediction": {
@@ -229,7 +229,7 @@ export default function Page() {
                 "apy_estimate": 16.9,
                 "min_stake": 200,
                 "investors_count": 31,
-                "risk_level": "Medium",
+                "risk_level": "Medium" as const,
                 "liquidity_locked_until": "2025-10-30"
               },
               "ai_yield_prediction": {
@@ -418,7 +418,7 @@ export default function Page() {
               <span className="text-sm font-medium">Avg APY</span>
             </div>
             <p className="text-2xl font-bold text-blue-700">
-              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.apy_estimate, 0) / (farmData?.fields.length || 1)}%
+              {farmData?.fields ? (farmData.fields.reduce((sum, f) => sum + f.investment_pool.apy_estimate, 0) / farmData.fields.length).toFixed(1) : 0}%
             </p>
           </div>
           <div className="bg-white/80 rounded-lg p-4 shadow">

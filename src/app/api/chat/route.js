@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 // Uncomment this when you add OpenAI
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
+}) : null;
 
 export async function POST(request) {
   try {
@@ -37,6 +37,13 @@ Guidelines:
 - Alert about concerning conditions (low moisture <40%, high temp >35°C, high humidity >90%)
 - Use simple language that farmers can understand
 - If asked about specific fields, reference them by field ID and crop name`;
+
+    if (!openai) {
+      return NextResponse.json({ 
+        error: 'OpenAI API key not configured',
+        response: 'OpenAI is not configured. Please add your OPENAI_API_KEY to use AI features.'
+      }, { status: 500 });
+    }
 
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
