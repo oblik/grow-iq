@@ -1,6 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { MessageCircle, X, Send, Bot, User, Loader2, Wallet, TrendingUp, DollarSign, Users, Target, Award } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2, Wallet, TrendingUp, DollarSign, Users, Target, Award, Eye, Zap, Sparkles } from "lucide-react";
+import FarmVerse3D from './FarmVerse3D';
+import ParticleField from './ParticleField';
+import NeuralVisualizer from './NeuralVisualizer';
+import MatrixRain from './MatrixRain';
+import HolographicUI from './HolographicUI';
+import FloatingActionHub from './FloatingActionHub';
 
 // ---- Type Definitions ----
 type Field = {
@@ -336,9 +342,26 @@ export default function Page() {
 
   // Render main dashboard
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-blue-100 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-blue-100 py-8 relative overflow-hidden">
+      {/* Particle Background */}
+      <div className="absolute inset-0 opacity-20">
+        <ParticleField
+          particleCount={30}
+          effects={['glow', 'magnetic']}
+          colors={['#10b981', '#22c55e', '#f59e0b', '#8b5cf6']}
+        />
+      </div>
+
+      {/* Matrix Rain Effect */}
+      <div className="absolute inset-0 opacity-10">
+        <MatrixRain
+          characters={['0', '1', '$', 'Ξ', '⚡', '🌱', '📈', '💎', 'GUI']}
+          color="#10b981"
+          speed={0.5}
+        />
+      </div>
       {/* Enhanced Header with DeFi Stats */}
-      <header className="mx-auto max-w-7xl mb-8 px-6">
+      <header className="mx-auto max-w-7xl mb-8 px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
           <div>
             <h1 className="text-4xl font-bold text-emerald-700 mb-2 drop-shadow flex items-center gap-3">
@@ -401,49 +424,117 @@ export default function Page() {
           </div>
         </div>
 
-        {/* DeFi Stats Overview */}
+        {/* Holographic DeFi Stats */}
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white/80 rounded-lg p-4 shadow">
-            <div className="flex items-center gap-2 text-emerald-600 mb-2">
-              <DollarSign size={16} />
-              <span className="text-sm font-medium">Total Staked</span>
-            </div>
-            <p className="text-2xl font-bold text-emerald-700">
-              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.total_staked, 0).toLocaleString()} $GUI
-            </p>
-          </div>
-          <div className="bg-white/80 rounded-lg p-4 shadow">
-            <div className="flex items-center gap-2 text-blue-600 mb-2">
-              <TrendingUp size={16} />
-              <span className="text-sm font-medium">Avg APY</span>
-            </div>
-            <p className="text-2xl font-bold text-blue-700">
-              {farmData?.fields ? (farmData.fields.reduce((sum, f) => sum + f.investment_pool.apy_estimate, 0) / farmData.fields.length).toFixed(1) : 0}%
-            </p>
-          </div>
-          <div className="bg-white/80 rounded-lg p-4 shadow">
-            <div className="flex items-center gap-2 text-purple-600 mb-2">
-              <Users size={16} />
-              <span className="text-sm font-medium">Active Investors</span>
-            </div>
-            <p className="text-2xl font-bold text-purple-700">
-              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.investors_count, 0)}
-            </p>
-          </div>
-          <div className="bg-white/80 rounded-lg p-4 shadow">
-            <div className="flex items-center gap-2 text-orange-600 mb-2">
-              <Target size={16} />
-              <span className="text-sm font-medium">Active Pools</span>
-            </div>
-            <p className="text-2xl font-bold text-orange-700">
-              {farmData?.fields.length || 0}
-            </p>
-          </div>
+          <HolographicUI
+            title="Total Staked"
+            value={`${farmData?.fields.reduce((sum, f) => sum + f.investment_pool.total_staked, 0).toLocaleString()} $GUI`}
+            subtitle="Total Value Locked"
+            icon={<DollarSign size={16} />}
+            gradient={['#10b981', '#22c55e']}
+            animated={true}
+            glowEffect={true}
+            dataStream={farmData?.fields.map(f => f.investment_pool.total_staked / 50000) || []}
+          />
+          
+          <HolographicUI
+            title="Avg APY"
+            value={`${farmData?.fields ? (farmData.fields.reduce((sum, f) => sum + f.investment_pool.apy_estimate, 0) / farmData.fields.length).toFixed(1) : 0}%`}
+            subtitle="Annual Percentage Yield"
+            icon={<TrendingUp size={16} />}
+            gradient={['#3b82f6', '#60a5fa']}
+            animated={true}
+            glowEffect={true}
+            dataStream={farmData?.fields.map(f => f.investment_pool.apy_estimate / 20) || []}
+          />
+          
+          <HolographicUI
+            title="Active Investors"
+            value={farmData?.fields.reduce((sum, f) => sum + f.investment_pool.investors_count, 0)}
+            subtitle="Community Members"
+            icon={<Users size={16} />}
+            gradient={['#8b5cf6', '#a78bfa']}
+            animated={true}
+            glowEffect={true}
+            dataStream={farmData?.fields.map(f => f.investment_pool.investors_count / 50) || []}
+          />
+          
+          <HolographicUI
+            title="Active Pools"
+            value={farmData?.fields.length || 0}
+            subtitle="Investment Options"
+            icon={<Target size={16} />}
+            gradient={['#f59e0b', '#fbbf24']}
+            animated={true}
+            glowEffect={true}
+            dataStream={farmData?.fields.map(f => f.growth_progress_percent / 100) || []}
+          />
         </div>
       </header>
 
+      {/* 3D Farm Visualization */}
+      <section className="max-w-7xl mx-auto px-6 mb-8 relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-emerald-500/20 rounded-lg">
+                <Eye className="text-emerald-600" size={20} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-emerald-800">FarmVerse 3D</h2>
+                <p className="text-sm text-emerald-600">Interactive Farm Visualization</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 bg-emerald-500/20 backdrop-blur-sm rounded-lg px-3 py-2">
+              <Sparkles className="text-emerald-600 animate-pulse" size={16} />
+              <span className="text-sm font-medium text-emerald-700">Live Data</span>
+            </div>
+          </div>
+          
+          <FarmVerse3D 
+            farmData={farmData} 
+            onFieldSelect={navigateToField}
+          />
+        </div>
+      </section>
+
+      {/* AI Neural Network Visualization */}
+      <section className="max-w-7xl mx-auto px-6 mb-8 relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-500/20 rounded-lg">
+                <Zap className="text-purple-600" size={20} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-purple-800">AI Yield Predictor</h2>
+                <p className="text-sm text-purple-600">Neural Network Analysis</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 bg-purple-500/20 backdrop-blur-sm rounded-lg px-3 py-2">
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-purple-700">Processing</span>
+            </div>
+          </div>
+          
+          <div className="h-64">
+            <NeuralVisualizer 
+              data={farmData?.fields.map(f => [
+                f.growth_progress_percent / 100,
+                f.soil_moisture_percent / 100,
+                f.temperature_celsius / 40,
+                f.ai_yield_prediction.confidence_score / 100
+              ])}
+              theme="neural"
+              speed={1.5}
+              intensity={1.2}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Enhanced Field Cards Grid */}
-      <main className="max-w-7xl mx-auto px-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <main className="max-w-7xl mx-auto px-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 relative z-10">
         {farmData?.fields?.map((field) => (
           <EnhancedFieldCard key={field.field_id} field={field} onViewDetails={navigateToField} walletConnected={walletConnected} />
         )) || (
@@ -455,6 +546,40 @@ export default function Page() {
 
       {/* AI Chatbot */}
       <AIChatbot farmData={farmData} />
+
+      {/* Floating Action Hub */}
+      <FloatingActionHub 
+        onAction={(action) => {
+          console.log(`🚀 Action triggered: ${action}`);
+          // Handle various actions
+          switch(action) {
+            case 'vr-mode':
+              // Toggle VR visualization mode
+              break;
+            case 'ai-insights':
+              // Show AI-powered insights modal
+              break;
+            case 'neural-view':
+              // Switch to neural network focused view
+              break;
+            case 'holographic':
+              // Enable holographic display mode
+              break;
+            case 'screenshot':
+              // Capture dashboard screenshot
+              break;
+            case 'sound-fx':
+              // Toggle sound effects
+              break;
+            case 'themes':
+              // Open theme selection
+              break;
+            case 'boost':
+              // Enable performance boost mode
+              break;
+          }
+        }}
+      />
     </div>
   );
 }
@@ -490,7 +615,16 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
   const expectedReturn = (field.ai_yield_prediction.estimated_yield_tons * field.ai_yield_prediction.market_price_estimate).toLocaleString();
 
   return (
-    <section className="relative bg-white/80 shadow-xl rounded-xl p-6 border border-emerald-100 hover:scale-[1.01] hover:shadow-emerald-300 transition-all duration-200 flex flex-col gap-4 overflow-hidden cursor-pointer">
+    <section className="relative bg-white/80 backdrop-blur-lg shadow-xl rounded-xl p-6 border border-emerald-100 hover:scale-[1.02] hover:shadow-emerald-300 transition-all duration-200 flex flex-col gap-4 overflow-hidden cursor-pointer group">
+      {/* Particle effect overlay */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300">
+        <ParticleField
+          particleCount={8}
+          effects={['glow']}
+          colors={[field.investment_pool.risk_level === 'Low' ? '#22c55e' : field.investment_pool.risk_level === 'Medium' ? '#f59e0b' : '#ef4444']}
+          size={{ min: 1, max: 3 }}
+        />
+      </div>
       <div className="flex items-center gap-2">
         <span className="text-3xl">{getCropEmoji(field.crop_name)}</span>
         <div className="flex-1">
