@@ -10,7 +10,7 @@ export function Header() {
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <h1 className="text-2xl font-bold text-green-600">GrowIQ</h1>
-            <span className="text-gray-500">Agricultural Dashboard</span>
+            <span className="text-gray-700 font-medium">Agricultural Dashboard</span>
           </div>
           
           <div className="flex items-center space-x-6">

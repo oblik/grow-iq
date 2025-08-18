@@ -1,18 +1,20 @@
 'use client'
 
 import { useSession, signIn, signOut } from 'next-auth/react'
+import { useHydration } from '@/hooks/useHydration'
 
 export function AuthButton() {
   const { data: session, status } = useSession()
+  const isHydrated = useHydration()
 
-  if (status === 'loading') {
-    return <div className="animate-pulse bg-gray-200 h-10 w-24 rounded"></div>
+  if (!isHydrated || status === 'loading') {
+    return <div className="animate-pulse bg-gray-300 h-10 w-24 rounded border"></div>
   }
 
   if (session) {
     return (
       <div className="flex items-center gap-4">
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-gray-800 font-medium">
           Welcome, {session.user?.name || session.user?.email}
         </span>
         <button

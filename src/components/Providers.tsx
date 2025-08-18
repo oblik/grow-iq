@@ -17,8 +17,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <OnchainKitProvider
             apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
             chain={base}
+            config={{
+              appearance: {
+                mode: 'auto',
+                theme: 'default'
+              }
+            }}
           >
-            {children}
+            <div className="onchainkit-theme">
+              {children}
+            </div>
           </OnchainKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
