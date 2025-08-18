@@ -27,11 +27,23 @@ body {
 
 /* Ensure good contrast for interactive elements */
 .text-gray-600 {
-  color: rgb(75 85 99);
+  color: rgb(55 65 81);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .text-gray-500 {
-  color: rgb(107 114 128);
+  color: rgb(75 85 99);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.text-gray-700 {
+  color: rgb(55 65 81);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.text-gray-800 {
+  color: rgb(31 41 55);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,6 +53,14 @@ body {
   
   .text-gray-500 {
     color: rgb(156 163 175);
+  }
+  
+  .text-gray-700 {
+    color: rgb(229 231 235);
+  }
+  
+  .text-gray-800 {
+    color: rgb(243 244 246);
   }
 }
 

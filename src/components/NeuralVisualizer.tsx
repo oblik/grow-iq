@@ -397,28 +397,28 @@ export default function NeuralVisualizer({
       </div>
       
       {/* Stats Panel */}
-      <div className="absolute top-4 right-4 bg-black/20 backdrop-blur-sm text-white rounded-lg p-3">
+      <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white rounded-lg p-3 border border-white/20">
         <div className="flex items-center gap-2 mb-2">
           <Activity size={16} className="text-green-400" />
-          <span className="text-sm font-semibold">Neural Activity</span>
+          <span className="text-sm font-bold drop-shadow-lg">Neural Activity</span>
         </div>
         
         <div className="space-y-1 text-xs font-mono">
           <div className="flex justify-between gap-4">
-            <span>Neurons:</span>
-            <span className="text-cyan-300">{stats.neurons}</span>
+            <span className="text-white drop-shadow-md">Neurons:</span>
+            <span className="text-cyan-300 font-bold drop-shadow-md">{stats.neurons}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span>Connections:</span>
-            <span className="text-blue-300">{stats.connections}</span>
+            <span className="text-white drop-shadow-md">Connections:</span>
+            <span className="text-blue-300 font-bold drop-shadow-md">{stats.connections}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span>Active Pulses:</span>
-            <span className="text-purple-300">{stats.pulses}</span>
+            <span className="text-white drop-shadow-md">Active Pulses:</span>
+            <span className="text-purple-300 font-bold drop-shadow-md">{stats.pulses}</span>
           </div>
           <div className="flex justify-between gap-4">
-            <span>Avg Activity:</span>
-            <span className="text-green-300">{stats.activity}%</span>
+            <span className="text-white drop-shadow-md">Avg Activity:</span>
+            <span className="text-green-300 font-bold drop-shadow-md">{stats.activity}%</span>
           </div>
         </div>
         
@@ -432,20 +432,20 @@ export default function NeuralVisualizer({
       </div>
       
       {/* Layer Labels */}
-      <div className="absolute bottom-4 left-4 right-4 flex justify-between text-white/60 text-xs">
-        <span>INPUT</span>
-        <span>HIDDEN</span>
-        <span>PROCESSING</span>
-        <span>ANALYSIS</span>
-        <span>OUTPUT</span>
+      <div className="absolute bottom-4 left-4 right-4 flex justify-between text-white text-xs font-semibold">
+        <span className="drop-shadow-lg">INPUT</span>
+        <span className="drop-shadow-lg">HIDDEN</span>
+        <span className="drop-shadow-lg">PROCESSING</span>
+        <span className="drop-shadow-lg">ANALYSIS</span>
+        <span className="drop-shadow-lg">OUTPUT</span>
       </div>
       
       {/* Loading State */}
       {neurons.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="text-white text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-            <p className="text-sm">Initializing Neural Network...</p>
+            <p className="text-sm font-semibold drop-shadow-lg">Initializing Neural Network...</p>
           </div>
         </div>
       )}

@@ -133,11 +133,11 @@ export default function HolographicUI({
               </div>
             )}
             <div>
-              <h3 className="text-lg font-bold" style={{ color: gradient[0] }}>
+              <h3 className="text-lg font-bold drop-shadow-sm" style={{ color: gradient[0], textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
                 {title}
               </h3>
               {subtitle && (
-                <p className="text-sm opacity-70" style={{ color: gradient[1] }}>
+                <p className="text-sm opacity-90 font-medium drop-shadow-sm" style={{ color: gradient[1], textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
                   {subtitle}
                 </p>
               )}
@@ -160,10 +160,10 @@ export default function HolographicUI({
 
         {/* Value display */}
         <div 
-          className="text-3xl font-bold mb-2"
+          className="text-3xl font-bold mb-2 drop-shadow-lg"
           style={{ 
             color: gradient[0],
-            textShadow: glowEffect ? `0 0 10px ${gradient[0]}88` : undefined,
+            textShadow: glowEffect ? `0 0 15px ${gradient[0]}88, 0 2px 4px rgba(0,0,0,0.3)` : '0 2px 4px rgba(0,0,0,0.3)',
             ...pulseAnimation
           }}
         >
@@ -181,19 +181,19 @@ export default function HolographicUI({
         )}
 
         {/* Decorative elements */}
-        <div className="flex justify-between items-end text-xs opacity-60">
+        <div className="flex justify-between items-end text-xs opacity-90">
           <div className="flex items-center gap-2">
             <div 
               className="w-3 h-1 rounded"
               style={{ backgroundColor: gradient[0] }}
             />
-            <span style={{ color: gradient[0] }}>LIVE</span>
+            <span style={{ color: gradient[0], textShadow: '0 1px 2px rgba(0,0,0,0.3)' }} className="font-semibold">LIVE</span>
           </div>
           
           {animated && (
             <div className="flex items-center gap-1">
               <Sparkles size={12} style={{ color: gradient[1] }} />
-              <span style={{ color: gradient[1] }}>REAL-TIME</span>
+              <span style={{ color: gradient[1], textShadow: '0 1px 2px rgba(0,0,0,0.3)' }} className="font-semibold">REAL-TIME</span>
             </div>
           )}
         </div>

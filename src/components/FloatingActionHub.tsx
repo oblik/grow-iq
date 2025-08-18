@@ -207,7 +207,7 @@ export default function FloatingActionHub({
                     color: action.color
                   }}
                 >
-                  <span className="text-sm font-medium">{action.label}</span>
+                  <span className="text-sm font-semibold drop-shadow-md">{action.label}</span>
                   
                   {/* Arrow */}
                   <div 

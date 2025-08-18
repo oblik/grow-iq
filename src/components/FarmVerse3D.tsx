@@ -399,22 +399,29 @@ export default function FarmVerse3D({ farmData, onFieldSelect }: FarmVerse3DProp
     if (!isHighlighted) return;
     
     // Info background
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    ctx.roundRect(x - 80, y - 60, 160, 50, 8);
-    ctx.fill();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+    // Use fillRect instead of roundRect for better compatibility
+    ctx.fillRect(x - 80, y - 60, 160, 50);
+    
+    // Add border for better visibility
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x - 80, y - 60, 160, 50);
     
     // Field name
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px Arial';
+    ctx.font = 'bold 14px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(`${field.crop_name} (${field.field_id})`, x, y - 35);
     
     // Progress
-    ctx.font = '10px Arial';
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#f3f4f6';
     ctx.fillText(`${field.growth_progress_percent}% Growth`, x, y - 20);
     
     // APY
-    ctx.fillStyle = '#22c55e';
+    ctx.fillStyle = '#34d399';
+    ctx.font = 'bold 12px Arial';
     ctx.fillText(`${field.investment_pool.apy_estimate}% APY`, x, y - 5);
   };
 
@@ -617,6 +624,8 @@ export default function FarmVerse3D({ farmData, onFieldSelect }: FarmVerse3DProp
         onClick={handleCanvasClick}
         onMouseMove={handleCanvasMouseMove}
         style={{ imageRendering: 'crisp-edges' }}
+        aria-label="Interactive 3D farm visualization"
+        role="img"
       />
       
       {/* Controls Overlay */}
@@ -625,6 +634,7 @@ export default function FarmVerse3D({ farmData, onFieldSelect }: FarmVerse3DProp
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             className="p-2 bg-black/20 backdrop-blur-sm text-white rounded-lg hover:bg-black/30 transition-all"
+            aria-label={isPlaying ? "Pause animation" : "Play animation"}
           >
             {isPlaying ? <Pause size={16} /> : <Play size={16} />}
           </button>

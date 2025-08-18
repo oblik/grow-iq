@@ -7,6 +7,7 @@ import NeuralVisualizer from './NeuralVisualizer';
 import MatrixRain from './MatrixRain';
 import HolographicUI from './HolographicUI';
 import FloatingActionHub from './FloatingActionHub';
+import SpectacularLoader from './SpectacularLoader';
 
 // ---- Type Definitions ----
 type Field = {
@@ -70,6 +71,7 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [viewState, setViewState] = useState<ViewState>({ page: 'dashboard' });
   const [walletConnected, setWalletConnected] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio>({
     total_gui_balance: 2500,
     total_staked: 1800,
@@ -340,6 +342,16 @@ export default function Page() {
     );
   }
 
+  // Show spectacular loader first
+  if (showLoader) {
+    return (
+      <SpectacularLoader 
+        onComplete={() => setShowLoader(false)}
+        duration={3500}
+      />
+    );
+  }
+
   // Render main dashboard
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-blue-100 py-8 relative overflow-hidden">
@@ -364,13 +376,13 @@ export default function Page() {
       <header className="mx-auto max-w-7xl mb-8 px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
           <div>
-            <h1 className="text-4xl font-bold text-emerald-700 mb-2 drop-shadow flex items-center gap-3">
+            <h1 className="text-4xl font-bold text-emerald-800 mb-2 drop-shadow-lg flex items-center gap-3">
               🌱 GrowIQ DeFi Platform
-              <span className="text-sm bg-emerald-500 text-white px-3 py-1 rounded-full">Powered by $GUI</span>
+              <span className="text-sm bg-emerald-600 text-white px-3 py-1 rounded-full shadow-lg">Powered by $GUI</span>
             </h1>
-            <p className="text-gray-700 text-lg">
+            <p className="text-gray-800 text-lg font-medium">
               Real-Time Agri Investment | Live IoT Data |{" "}
-              <span className="font-medium">
+              <span className="font-semibold text-emerald-700">
                 {farmData?.timestamp ? new Date(farmData.timestamp).toLocaleString() : 'No timestamp'}
               </span>
             </p>
@@ -381,19 +393,19 @@ export default function Page() {
             <nav className="flex gap-2">
               <button
                 onClick={() => navigateToPage('dashboard')}
-                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-lg border border-emerald-500"
               >
                 Dashboard
               </button>
               <button
                 onClick={() => navigateToPage('portfolio')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg border border-blue-500"
               >
                 Portfolio
               </button>
               <button
                 onClick={() => navigateToPage('staking')}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-lg border border-purple-500"
               >
                 Stake $GUI
               </button>
@@ -401,13 +413,13 @@ export default function Page() {
             
             {walletConnected ? (
               <div className="flex items-center gap-2">
-                <div className="bg-white/80 rounded-lg px-4 py-2 shadow">
-                  <p className="text-sm text-gray-600">$GUI Balance</p>
-                  <p className="font-bold text-emerald-700">{userPortfolio.total_gui_balance.toLocaleString()}</p>
+                <div className="bg-white/90 rounded-lg px-4 py-2 shadow-lg border border-gray-200">
+                  <p className="text-sm text-gray-700 font-medium">$GUI Balance</p>
+                  <p className="font-bold text-emerald-800 text-lg">{userPortfolio.total_gui_balance.toLocaleString()}</p>
                 </div>
                 <button
                   onClick={disconnectWallet}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors shadow-lg border border-red-400"
                 >
                   Disconnect
                 </button>
@@ -415,7 +427,7 @@ export default function Page() {
             ) : (
               <button
                 onClick={connectWallet}
-                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors shadow-lg"
+                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-lg border border-emerald-500"
               >
                 <Wallet size={20} />
                 Connect Wallet
@@ -477,17 +489,17 @@ export default function Page() {
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/20 rounded-lg">
-                <Eye className="text-emerald-600" size={20} />
+              <div className="p-2 bg-emerald-600/30 rounded-lg border border-emerald-500/50">
+                <Eye className="text-emerald-700" size={20} />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-emerald-800">FarmVerse 3D</h2>
-                <p className="text-sm text-emerald-600">Interactive Farm Visualization</p>
+                <h2 className="text-xl font-bold text-emerald-900">FarmVerse 3D</h2>
+                <p className="text-sm text-emerald-700 font-medium">Interactive Farm Visualization</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-emerald-500/20 backdrop-blur-sm rounded-lg px-3 py-2">
-              <Sparkles className="text-emerald-600 animate-pulse" size={16} />
-              <span className="text-sm font-medium text-emerald-700">Live Data</span>
+            <div className="flex items-center gap-2 bg-emerald-600/30 backdrop-blur-sm rounded-lg px-3 py-2 border border-emerald-500/50">
+              <Sparkles className="text-emerald-700 animate-pulse" size={16} />
+              <span className="text-sm font-semibold text-emerald-800">Live Data</span>
             </div>
           </div>
           
@@ -503,17 +515,17 @@ export default function Page() {
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Zap className="text-purple-600" size={20} />
+              <div className="p-2 bg-purple-600/30 rounded-lg border border-purple-500/50">
+                <Zap className="text-purple-700" size={20} />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-purple-800">AI Yield Predictor</h2>
-                <p className="text-sm text-purple-600">Neural Network Analysis</p>
+                <h2 className="text-xl font-bold text-purple-900">AI Yield Predictor</h2>
+                <p className="text-sm text-purple-700 font-medium">Neural Network Analysis</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-purple-500/20 backdrop-blur-sm rounded-lg px-3 py-2">
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-purple-700">Processing</span>
+            <div className="flex items-center gap-2 bg-purple-600/30 backdrop-blur-sm rounded-lg px-3 py-2 border border-purple-500/50">
+              <div className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold text-purple-800">Processing</span>
             </div>
           </div>
           
@@ -631,8 +643,8 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
           <h2 className="text-2xl font-semibold text-emerald-900">
             {field.crop_name}
           </h2>
-          <div className="text-md text-gray-500">
-            Field: <span className="font-medium">{field.field_id}</span>
+          <div className="text-md text-gray-700">
+            Field: <span className="font-semibold text-gray-800">{field.field_id}</span>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1">
@@ -651,20 +663,20 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
       <div className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg p-4 border border-emerald-200">
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <p className="text-gray-600">APY Estimate</p>
-            <p className="text-lg font-bold text-emerald-700">{field.investment_pool.apy_estimate}%</p>
+            <p className="text-gray-700 font-medium">APY Estimate</p>
+            <p className="text-lg font-bold text-emerald-800">{field.investment_pool.apy_estimate}%</p>
           </div>
           <div>
-            <p className="text-gray-600">Total Staked</p>
-            <p className="text-lg font-bold text-blue-700">{field.investment_pool.total_staked.toLocaleString()}</p>
+            <p className="text-gray-700 font-medium">Total Staked</p>
+            <p className="text-lg font-bold text-blue-800">{field.investment_pool.total_staked.toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-gray-600">Investors</p>
-            <p className="text-lg font-bold text-purple-700">{field.investment_pool.investors_count}</p>
+            <p className="text-gray-700 font-medium">Investors</p>
+            <p className="text-lg font-bold text-purple-800">{field.investment_pool.investors_count}</p>
           </div>
           <div>
-            <p className="text-gray-600">Min Stake</p>
-            <p className="text-lg font-bold text-orange-700">{field.investment_pool.min_stake} $GUI</p>
+            <p className="text-gray-700 font-medium">Min Stake</p>
+            <p className="text-lg font-bold text-orange-800">{field.investment_pool.min_stake} $GUI</p>
           </div>
         </div>
       </div>
@@ -672,30 +684,30 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
       {/* AI Prediction */}
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-200">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-purple-600">🤖</span>
-          <span className="text-sm font-medium text-purple-700">AI Yield Prediction</span>
-          <span className="ml-auto text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
+          <span className="text-purple-700">🤖</span>
+          <span className="text-sm font-semibold text-purple-800">AI Yield Prediction</span>
+          <span className="ml-auto text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded font-medium">
             {field.ai_yield_prediction.confidence_score}% confidence
           </span>
         </div>
-        <p className="text-sm text-gray-700">
-          Est. Yield: <span className="font-bold">{field.ai_yield_prediction.estimated_yield_tons}t</span> | 
-          Market Value: <span className="font-bold text-green-600">${expectedReturn}</span>
+        <p className="text-sm text-gray-800">
+          Est. Yield: <span className="font-bold text-gray-900">{field.ai_yield_prediction.estimated_yield_tons}t</span> | 
+          Market Value: <span className="font-bold text-green-700">${expectedReturn}</span>
         </p>
       </div>
 
       {/* Growth Progress Bar */}
       <div>
-        <label className="text-sm text-gray-600 font-medium">
+        <label className="text-sm text-gray-800 font-semibold">
           Growth Progress
         </label>
-        <div className="w-full bg-emerald-100 rounded-full h-4 overflow-hidden mt-1">
+        <div className="w-full bg-emerald-100 rounded-full h-4 overflow-hidden mt-1 border border-emerald-200">
           <div
             className="h-full rounded-full bg-gradient-to-r from-yellow-300 via-emerald-400 to-emerald-600 transition-all"
             style={{ width: `${Math.min(field.growth_progress_percent, 100)}%` }}
           />
         </div>
-        <p className="text-xs mt-1 text-gray-700 font-mono">
+        <p className="text-xs mt-1 text-gray-800 font-semibold font-mono">
           {field.growth_progress_percent}% ({field.days_since_planting} days)
         </p>
       </div>
@@ -728,21 +740,22 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
       <div className="flex gap-2 mt-2">
         <button
           onClick={() => onViewDetails(field)}
-          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-emerald-500"
+          aria-label={`View details for ${field.crop_name} field ${field.field_id}`}
         >
           <span>View Details</span>
         </button>
         {!walletConnected ? (
           <button 
             disabled
-            className="flex-1 bg-gray-400 text-white font-semibold py-2 px-4 rounded-lg cursor-not-allowed"
+            className="flex-1 bg-gray-500 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed shadow-lg border border-gray-400"
           >
             Connect Wallet
           </button>
         ) : (
           <button
             onClick={() => onViewDetails(field)}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-blue-500"
           >
             <DollarSign size={16} />
             <span>Invest</span>
@@ -1768,8 +1781,8 @@ function Stat({
 }) {
   return (
     <div className="flex flex-col items-start">
-      <dt className="text-xs text-gray-400 uppercase tracking-wide">{label}</dt>
-      <dd className={`font-semibold ${className || ''}`}>{value}</dd>
+      <dt className="text-xs text-gray-700 uppercase tracking-wide font-medium">{label}</dt>
+      <dd className={`font-bold text-gray-900 ${className || ''}`}>{value}</dd>
     </div>
   );
 }
