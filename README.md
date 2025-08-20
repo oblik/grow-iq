@@ -1,46 +1,46 @@
-# 🌱 GrowIQ DeFi Platform
+# GrowIQ DeFi Platform
 
 **Revolutionizing Agriculture with Blockchain Technology and AI**
 
 GrowIQ DeFi is an innovative decentralized finance platform that bridges traditional agriculture with blockchain technology. Users can invest in real farming operations, track crop growth through IoT sensors, and earn yields based on actual harvest outcomes.
 
-## 📽️ Project Demo
+## Project Demo
 
-(https://github.com/AloysJehwin/grow-iq/blob/master/public/GrowIQ_Video.mp4)
+[![GrowIQ Platform Demo](https://img.youtube.com/vi/R0RJ2Up2V8E/0.jpg)](https://youtu.be/R0RJ2Up2V8E)
 
 *Watch our platform in action - showcasing real-time farm monitoring, investment features, and AI-powered yield predictions.*
 
-> **Note**: The demo video is located at `/public/GrowIQ_Video.mp4` in this repository.
+Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see the full demonstration.
 
-## ✨ Features
+## Features
 
-### 🚀 Core Platform Features
+### Core Platform Features
 - **Real-time Farm Monitoring**: Live IoT data from agricultural fields
 - **DeFi Investment Pools**: Stake $GUI tokens in farming operations
 - **AI Yield Prediction**: Machine learning models for harvest forecasting
 - **3D Farm Visualization**: Interactive FarmVerse 3D environment
 - **Neural Network Analysis**: AI-powered crop optimization insights
 
-### 💰 Investment Features
+### Investment Features
 - **Multiple Risk Levels**: Low, Medium, and High-risk investment pools
 - **Competitive APY**: 10-20% annual percentage yields
 - **Diversified Crops**: Wheat, Rice, Maize, Cotton, Soybean, and more
 - **Transparent Returns**: Blockchain-recorded yield distributions
 - **Flexible Staking**: Various minimum stake amounts and lock periods
 
-### 📊 Portfolio Management
+### Portfolio Management
 - **Real-time Balance Tracking**: Monitor $GUI token holdings
 - **Investment Dashboard**: View all active farming investments
 - **Rewards History**: Track claimed and pending rewards
 - **Performance Analytics**: Portfolio growth and yield analysis
 
-### 🤖 AI Assistant
+### AI Assistant
 - **Investment Guidance**: Personalized staking recommendations
 - **Risk Assessment**: Analysis of farming and market conditions
 - **Market Insights**: Timing and strategy suggestions
 - **24/7 Support**: Always-available chat assistance
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Frontend
 - **Next.js 15.4.4**: React-based web framework
@@ -65,7 +65,7 @@ GrowIQ DeFi is an innovative decentralized finance platform that bridges traditi
 - **Autoprefixer**: CSS vendor prefixing
 - **ESLint**: Code quality and consistency
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+ installed
@@ -108,85 +108,85 @@ GrowIQ DeFi is an innovative decentralized finance platform that bridges traditi
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📱 Usage Guide
+## Usage Guide
 
-### 🔗 Connecting Your Wallet
+### Connecting Your Wallet
 1. Click "Connect Wallet" in the top navigation
 2. Choose your preferred wallet provider
 3. Approve the connection request
 4. Your $GUI balance will be displayed
 
-### 💸 Making Investments
+### Making Investments
 1. Browse available farming pools on the dashboard
 2. Click "View Details" on any field card
 3. Review investment metrics (APY, risk level, lock period)
 4. Enter your desired stake amount
 5. Confirm the transaction in your wallet
 
-### 📈 Monitoring Investments
+### Monitoring Investments
 1. Navigate to the "Portfolio" section
 2. View your active investments and returns
 3. Track growth progress and yield predictions
 4. Claim rewards when available
 
-### 🎯 Using AI Features
+### Using AI Features
 1. Click the chat icon in the bottom-right corner
 2. Ask about investment strategies, risk analysis, or market conditions
 3. Get personalized recommendations based on your portfolio
 4. Receive real-time alerts about your investments
 
-## 🎮 Platform Components
+## Platform Components
 
-### 🌍 FarmVerse 3D
+### FarmVerse 3D
 Interactive 3D visualization of farming operations with:
 - Real-time crop growth animations
 - Environmental condition displays
 - Click-to-explore field details
 - Immersive farming experience
 
-### 🧠 Neural Visualizer
+### Neural Visualizer
 AI-powered analytics displaying:
 - Crop growth predictions
 - Environmental risk factors
 - Market condition analysis
 - Yield optimization suggestions
 
-### 🎨 Holographic UI
+### Holographic UI
 Futuristic interface elements featuring:
 - Dynamic data visualization
 - Animated statistics
 - Gradient backgrounds
 - Interactive particle effects
 
-### ⚡ Floating Action Hub
+### Floating Action Hub
 Quick access toolbar with:
 - VR mode toggle
 - AI insights panel
 - Performance booster
 - Theme customization
 
-## 🔧 Configuration
+## Configuration
 
-### 🎨 Theming
+### Theming
 The platform supports dark/light themes with:
 ```jsx
 import { ThemeProvider } from '@/components/ThemeProvider'
 ```
 
-### 💾 Data Management
+### Data Management
 Real-time data is managed through:
 - React state for UI interactions
 - TanStack Query for server state
 - Local storage for user preferences
 - Blockchain for transaction records
 
-### 🔐 Security Features
+### Security Features
 - NextAuth.js session management
 - Secure wallet connections
 - Encrypted API communications
 - Input validation and sanitization
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 grow-iq/
@@ -215,7 +215,7 @@ grow-iq/
 └── tsconfig.json          # TypeScript config
 ```
 
-## 🔮 Future Roadmap
+## Future Roadmap
 
 ### Phase 1: Core Platform (Current)
 - [x] Basic investment pools
@@ -241,7 +241,7 @@ grow-iq/
 - [ ] Enterprise solutions
 - [ ] Sustainability tracking
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from the community! Please follow these steps:
 
@@ -251,29 +251,29 @@ We welcome contributions from the community! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### 📋 Development Guidelines
+### Development Guidelines
 - Follow TypeScript best practices
 - Use ESLint for code consistency
 - Write descriptive commit messages
 - Test features thoroughly before submitting
 - Update documentation for new features
 
-## 📊 Performance Metrics
+## Performance Metrics
 
-### ⚡ Platform Statistics
+### Platform Statistics
 - **Average APY**: 14.2% across all pools
 - **Total Value Locked**: $2.1M in farming operations
 - **Active Users**: 500+ investors
 - **Successful Harvests**: 95% completion rate
 - **AI Prediction Accuracy**: 87% average confidence
 
-### 🎯 Investment Pools
+### Investment Pools
 - **6 Active Crops**: Diversified portfolio options
 - **85+ Investors**: Growing community
 - **$160K+ Staked**: Community investment volume
 - **Multiple Risk Levels**: Conservative to aggressive options
 
-## ❓ FAQ
+## FAQ
 
 ### Q: What is $GUI token?
 A: $GUI is the native utility token of GrowIQ platform, used for staking in farming pools, governance voting, and earning rewards.
@@ -290,25 +290,25 @@ A: Early withdrawal is possible with penalties. Lock periods ensure farm funding
 ### Q: How accurate are AI predictions?
 A: Our AI models achieve 85-90% accuracy by analyzing weather patterns, soil conditions, and historical yield data.
 
-## 📞 Support & Contact
+## Support & Contact
 
-### 🆘 Getting Help
+### Getting Help
 - **AI Assistant**: Available 24/7 through the in-app chat
 - **Documentation**: Comprehensive guides and tutorials
 - **Community Forum**: Connect with other investors
 - **Email Support**: support@growiq.finance
 
-### 🌐 Links
+### Links
 - **Website**: [https://growiq.finance](https://growiq.finance)
 - **Twitter**: [@GrowIQDeFi](https://twitter.com/GrowIQDeFi)
 - **Discord**: [Join our community](https://discord.gg/growiq)
 - **Telegram**: [GrowIQ Official](https://t.me/growiqofficial)
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Agricultural Partners**: Local farming cooperatives
 - **Technology Partners**: Blockchain and IoT providers
@@ -317,8 +317,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by the GrowIQ Team**
+**Built with love by the GrowIQ Team**
 
 *Transforming agriculture through blockchain innovation*
 
-🌾 **Happy Farming, Happy Investing!** 🚀
+**Happy Farming, Happy Investing!**
