@@ -17,7 +17,7 @@ export default function MatrixRain({
   color = '#00ff88'
 }: MatrixRainProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;

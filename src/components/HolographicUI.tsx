@@ -27,7 +27,7 @@ export default function HolographicUI({
 }: HolographicUIProps) {
   const [animationPhase, setAnimationPhase] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (animated) {

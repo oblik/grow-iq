@@ -27,15 +27,15 @@ export function TransactionComponent() {
   if (!isHydrated) {
     return (
       <div className="space-y-4">
-        <div className="animate-pulse bg-gray-200 h-6 w-32 rounded"></div>
-        <div className="animate-pulse bg-gray-200 h-10 w-full rounded"></div>
+        <div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-6 w-32 rounded"></div>
+        <div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-10 w-full rounded"></div>
       </div>
     )
   }
 
   if (!address) {
     return (
-      <div className="text-gray-700 bg-gray-50 p-4 rounded-lg border text-center">
+      <div className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-600 text-center">
         Please connect your wallet to make transactions
       </div>
     )
@@ -43,8 +43,8 @@ export function TransactionComponent() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900">Agricultural Payments</h3>
-      <p className="text-sm text-gray-600">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Agricultural Payments</h3>
+      <p className="text-sm text-gray-600 dark:text-gray-400">
         Stake tokens in agricultural investment pools or send payments to farmers
       </p>
       

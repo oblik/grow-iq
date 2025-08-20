@@ -45,7 +45,7 @@ export default function ParticleField({
   effects = ['glow', 'magnetic']
 }: ParticleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const mouseRef = useRef({ x: 0, y: 0, isMoving: false });
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isActive, setIsActive] = useState(true);

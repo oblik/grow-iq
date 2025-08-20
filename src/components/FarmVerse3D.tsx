@@ -73,7 +73,7 @@ type WeatherState = 'sunny' | 'rainy' | 'windy' | 'cloudy';
 
 export default function FarmVerse3D({ farmData, onFieldSelect }: FarmVerse3DProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   
   const [isPlaying, setIsPlaying] = useState(true);
   const [selectedField, setSelectedField] = useState<Field | null>(null);

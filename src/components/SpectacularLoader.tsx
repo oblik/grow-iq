@@ -24,7 +24,7 @@ export default function SpectacularLoader({
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
 
   // Progress and message cycling
   useEffect(() => {

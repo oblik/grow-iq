@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, Send, Bot, User, Loader2, Wallet, TrendingUp, DollarSign, Users, Target, Award, Eye, Zap, Sparkles } from "lucide-react";
+import { useWallet } from '@/contexts/WalletContext';
 import FarmVerse3D from './FarmVerse3D';
 import ParticleField from './ParticleField';
 import NeuralVisualizer from './NeuralVisualizer';
@@ -8,6 +9,7 @@ import MatrixRain from './MatrixRain';
 import HolographicUI from './HolographicUI';
 import FloatingActionHub from './FloatingActionHub';
 import SpectacularLoader from './SpectacularLoader';
+import FieldDetailPage from './FieldDetailPage';
 
 // ---- Type Definitions ----
 type Field = {
@@ -70,7 +72,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewState, setViewState] = useState<ViewState>({ page: 'dashboard' });
-  const [walletConnected, setWalletConnected] = useState(false);
+  const { isConnected: walletConnected, connect, disconnect } = useWallet();
   const [showLoader, setShowLoader] = useState(true);
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio>({
     total_gui_balance: 2500,
@@ -272,11 +274,11 @@ export default function Page() {
   };
 
   const connectWallet = () => {
-    setWalletConnected(true);
+    connect();
   };
 
   const disconnectWallet = () => {
-    setWalletConnected(false);
+    disconnect();
   };
 
   if (loading) {
@@ -313,7 +315,6 @@ export default function Page() {
         field={viewState.selectedField} 
         onBack={() => navigateToPage('dashboard')}
         walletConnected={walletConnected}
-        userBalance={userPortfolio.total_gui_balance}
       />
     );
   }
@@ -462,7 +463,7 @@ export default function Page() {
           
           <HolographicUI
             title="Active Investors"
-            value={farmData?.fields.reduce((sum, f) => sum + f.investment_pool.investors_count, 0)}
+            value={farmData?.fields.reduce((sum, f) => sum + f.investment_pool.investors_count, 0) || 0}
             subtitle="Community Members"
             icon={<Users size={16} />}
             gradient={['#8b5cf6', '#a78bfa']}
@@ -766,234 +767,6 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
   );
 }
 
-// ---- Field Detail Page with Investment Interface ----
-function FieldDetailPage({ field, onBack, walletConnected, userBalance }: { 
-  field: Field; 
-  onBack: () => void; 
-  walletConnected: boolean;
-  userBalance: number;
-}) {
-  const [stakeAmount, setStakeAmount] = useState(field.investment_pool.min_stake);
-  const [isStaking, setIsStaking] = useState(false);
-
-  const handleStake = async () => {
-    if (!walletConnected || stakeAmount < field.investment_pool.min_stake) return;
-    
-    setIsStaking(true);
-    // Simulate staking transaction
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsStaking(false);
-    alert(`Successfully staked ${stakeAmount} $GUI tokens in ${field.crop_name} farm!`);
-  };
-
-  const expectedReturns = (stakeAmount * field.investment_pool.apy_estimate / 100).toFixed(2);
-  const lockPeriod = Math.ceil((new Date(field.investment_pool.liquidity_locked_until).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-blue-100 p-8">
-      <div className="max-w-6xl mx-auto">
-        <button
-          onClick={onBack}
-          className="mb-6 flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
-        >
-          ← Back to Dashboard
-        </button>
-        
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Left Column - Farm Details */}
-          <div className="bg-white/80 rounded-xl p-8 shadow-xl">
-            <h1 className="text-3xl font-bold text-emerald-900 mb-6">
-              {getCropEmoji(field.crop_name)} {field.crop_name} - Field {field.field_id}
-            </h1>
-            
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Farm Information</h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <p><strong>Planting Date:</strong> {formatDate(field.planting_date)}</p>
-                    <p><strong>Expected Harvest:</strong> {formatDate(field.expected_harvest_date)}</p>
-                    <p><strong>Days Since Planting:</strong> {field.days_since_planting}</p>
-                    <p><strong>Growth Progress:</strong> {field.growth_progress_percent}%</p>
-                  </div>
-                  <div className="space-y-3">
-                    <p><strong>Soil Moisture:</strong> {field.soil_moisture_percent}%</p>
-                    <p><strong>Temperature:</strong> {field.temperature_celsius}°C</p>
-                    <p><strong>Humidity:</strong> {field.humidity_percent}%</p>
-                    <p><strong>Risk Level:</strong> 
-                      <span className={`ml-2 px-2 py-1 rounded text-sm ${
-                        field.investment_pool.risk_level === 'Low' ? 'bg-green-100 text-green-800' :
-                        field.investment_pool.risk_level === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {field.investment_pool.risk_level}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold mb-4">AI Yield Prediction</h2>
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <p><strong>Estimated Yield:</strong> {field.ai_yield_prediction.estimated_yield_tons} tons</p>
-                      <p><strong>Confidence Score:</strong> {field.ai_yield_prediction.confidence_score}%</p>
-                    </div>
-                    <div>
-                      <p><strong>Weather Risk:</strong> {(field.ai_yield_prediction.weather_risk_factor * 100).toFixed(1)}%</p>
-                      <p><strong>Market Price Est.:</strong> ${field.ai_yield_prediction.market_price_estimate}/ton</p>
-                    </div>
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-purple-200">
-                    <p className="text-lg font-bold text-green-600">
-                      Total Expected Value: ${(field.ai_yield_prediction.estimated_yield_tons * field.ai_yield_prediction.market_price_estimate).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold mb-4">Timeline Instructions</h2>
-                <ul className="list-disc list-inside space-y-2">
-                  {field.timeline_instructions.map((instruction, idx) => (
-                    <li key={idx} className="text-gray-700">{instruction}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Investment Interface */}
-          <div className="bg-white/80 rounded-xl p-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-emerald-900 mb-6">Investment Pool</h2>
-            
-            {/* Pool Stats */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
-                <p className="text-sm text-emerald-600 font-medium">APY Estimate</p>
-                <p className="text-2xl font-bold text-emerald-700">{field.investment_pool.apy_estimate}%</p>
-              </div>
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                <p className="text-sm text-blue-600 font-medium">Total Staked</p>
-                <p className="text-2xl font-bold text-blue-700">{field.investment_pool.total_staked.toLocaleString()}</p>
-              </div>
-              <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-                <p className="text-sm text-purple-600 font-medium">Active Investors</p>
-                <p className="text-2xl font-bold text-purple-700">{field.investment_pool.investors_count}</p>
-              </div>
-              <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
-                <p className="text-sm text-orange-600 font-medium">Lock Period</p>
-                <p className="text-2xl font-bold text-orange-700">{lockPeriod} days</p>
-              </div>
-            </div>
-
-            {/* Staking Interface */}
-            {walletConnected ? (
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Stake Amount ($GUI)
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={stakeAmount}
-                      onChange={(e) => setStakeAmount(Number(e.target.value))}
-                      min={field.investment_pool.min_stake}
-                      max={userBalance}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      placeholder={`Min: ${field.investment_pool.min_stake} $GUI`}
-                    />
-                    <button
-                      onClick={() => setStakeAmount(userBalance)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
-                    >
-                      MAX
-                    </button>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Your Balance: {userBalance.toLocaleString()} $GUI
-                  </p>
-                </div>
-
-                {/* Investment Calculation */}
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
-                  <h3 className="font-semibold text-green-800 mb-3">Investment Summary</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>Stake Amount:</span>
-                      <span className="font-bold">{stakeAmount.toLocaleString()} $GUI</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Expected Annual Returns:</span>
-                      <span className="font-bold text-green-600">{expectedReturns} $GUI</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Lock Period:</span>
-                      <span className="font-bold">{lockPeriod} days</span>
-                    </div>
-                    <div className="flex justify-between pt-2 border-t border-green-200">
-                      <span>Unlock Date:</span>
-                      <span className="font-bold">{formatDate(field.investment_pool.liquidity_locked_until)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stake Button */}
-                <button
-                  onClick={handleStake}
-                  disabled={isStaking || stakeAmount < field.investment_pool.min_stake || stakeAmount > userBalance}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-                >
-                  {isStaking ? (
-                    <>
-                      <Loader2 size={20} className="animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <DollarSign size={20} />
-                      Stake {stakeAmount.toLocaleString()} $GUI
-                    </>
-                  )}
-                </button>
-
-                {/* Warning */}
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <div className="flex items-start gap-2">
-                    <span className="text-yellow-600">⚠️</span>
-                    <div className="text-sm text-yellow-800">
-                      <p className="font-medium">Investment Risks:</p>
-                      <ul className="mt-1 list-disc list-inside space-y-1 text-xs">
-                        <li>Weather and environmental factors may affect yields</li>
-                        <li>Tokens are locked until harvest completion</li>
-                        <li>Returns are based on actual farm performance</li>
-                        <li>Market price fluctuations may impact final returns</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <div className="mb-4">
-                  <Wallet size={48} className="mx-auto text-gray-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">Connect Your Wallet</h3>
-                <p className="text-gray-500 mb-4">Connect your wallet to start investing in this farm</p>
-                <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-                  Connect Wallet
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ---- Portfolio Page ----
 function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {

@@ -81,7 +81,7 @@ export default function NeuralVisualizer({
   intensity = 1
 }: NeuralVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const [neurons, setNeurons] = useState<Neuron[]>([]);
   const [dataPulses, setDataPulses] = useState<DataPulse[]>([]);
   const [isPlaying, setIsPlaying] = useState(isActive);
