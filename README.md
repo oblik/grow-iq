@@ -76,7 +76,7 @@ https://github.com/user-attachments/assets/your-video-id
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/grow-iq.git
+   git clone https://github.com/AloysJehwin/grow-iq.git
    cd grow-iq
    ```
 
