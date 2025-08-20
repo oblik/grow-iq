@@ -10,6 +10,7 @@ import HolographicUI from './HolographicUI';
 import FloatingActionHub from './FloatingActionHub';
 import SpectacularLoader from './SpectacularLoader';
 import FieldDetailPage from './FieldDetailPage';
+import VideoPlayer from './VideoPlayer';
 
 // ---- Type Definitions ----
 type Field = {
@@ -484,6 +485,39 @@ export default function Page() {
           />
         </div>
       </header>
+
+      {/* Platform Demo Video */}
+      <section className="max-w-7xl mx-auto px-6 mb-8 relative z-10">
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-600/30 rounded-lg border border-purple-500/50">
+                <Eye className="text-purple-700" size={20} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-purple-900">Platform Demo</h2>
+                <p className="text-sm text-purple-700 font-medium">See GrowIQ in Action</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 bg-purple-600/30 backdrop-blur-sm rounded-lg px-3 py-2 border border-purple-500/50">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-semibold text-purple-800">Demo Video</span>
+            </div>
+          </div>
+          
+          <div className="aspect-video">
+            <VideoPlayer
+              src="/GrowIQ_Video.mp4"
+              title="GrowIQ DeFi Platform Demo"
+              description="Discover how blockchain meets agriculture - Real-time monitoring, AI predictions, and DeFi investments"
+              className="w-full h-full"
+              controls={true}
+              muted={true}
+              autoPlay={false}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* 3D Farm Visualization */}
       <section className="max-w-7xl mx-auto px-6 mb-8 relative z-10">
