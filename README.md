@@ -6,7 +6,7 @@ GrowIQ DeFi is an innovative decentralized finance platform that bridges traditi
 
 ## 📽️ Project Demo
 
-https://github.com/user-attachments/assets/your-video-id
+(https://github.com/AloysJehwin/grow-iq/blob/master/public/GrowIQ_Video.mp4)
 
 *Watch our platform in action - showcasing real-time farm monitoring, investment features, and AI-powered yield predictions.*
 
