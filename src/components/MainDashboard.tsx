@@ -26,13 +26,18 @@ type Field = {
   timeline_instructions: string[];
   // DeFi additions
   investment_pool: {
+    pool_id: number;
     total_staked: number;
     apy_estimate: number;
     min_stake: number;
+    max_stake: number;
     investors_count: number;
     risk_level: 'Low' | 'Medium' | 'High';
     liquidity_locked_until: string;
+    is_active: boolean;
+    contract_deployed: boolean;
   };
+  status: 'active' | 'available_soon';
   ai_yield_prediction: {
     estimated_yield_tons: number;
     confidence_score: number;
@@ -89,169 +94,12 @@ export default function Page() {
         setLoading(true);
         setError(null);
         
-        // Enhanced farm data with DeFi features
-        const enhancedFarmData = {
-          "message": "Live field data with DeFi metrics retrieved successfully.",
-          "timestamp": "2025-07-27T03:12:50.877218",
-          "fields": [
-            {
-              "field_id": "F1",
-              "crop_name": "Wheat",
-              "planting_date": "2025-06-27",
-              "expected_harvest_date": "2025-10-25",
-              "days_since_planting": 30,
-              "growth_progress_percent": 25,
-              "soil_moisture_percent": 82,
-              "temperature_celsius": 34.6,
-              "humidity_percent": 76,
-              "timeline_instructions": ["Prepare soil", "Sow seeds", "Irrigate every 10 days", "Harvest when golden"],
-              "investment_pool": {
-                "total_staked": 45000,
-                "apy_estimate": 12.5,
-                "min_stake": 100,
-                "investors_count": 23,
-                "risk_level": "Low" as const,
-                "liquidity_locked_until": "2025-10-30"
-              },
-              "ai_yield_prediction": {
-                "estimated_yield_tons": 8.2,
-                "confidence_score": 87,
-                "weather_risk_factor": 0.15,
-                "market_price_estimate": 280
-              }
-            },
-            {
-              "field_id": "F2",
-              "crop_name": "Rice",
-              "planting_date": "2025-05-28",
-              "expected_harvest_date": "2025-10-25",
-              "days_since_planting": 60,
-              "growth_progress_percent": 40,
-              "soil_moisture_percent": 84,
-              "temperature_celsius": 27.1,
-              "humidity_percent": 94,
-              "timeline_instructions": ["Flood field", "Transplant seedlings", "Maintain water level", "Harvest when golden"],
-              "investment_pool": {
-                "total_staked": 32000,
-                "apy_estimate": 15.2,
-                "min_stake": 50,
-                "investors_count": 18,
-                "risk_level": "Medium" as const,
-                "liquidity_locked_until": "2025-10-30"
-              },
-              "ai_yield_prediction": {
-                "estimated_yield_tons": 12.1,
-                "confidence_score": 92,
-                "weather_risk_factor": 0.08,
-                "market_price_estimate": 420
-              }
-            },
-            {
-              "field_id": "F3",
-              "crop_name": "Maize",
-              "planting_date": "2025-07-07",
-              "expected_harvest_date": "2025-10-05",
-              "days_since_planting": 20,
-              "growth_progress_percent": 22,
-              "soil_moisture_percent": 74,
-              "temperature_celsius": 33.7,
-              "humidity_percent": 94,
-              "timeline_instructions": ["Sow directly", "Weed regularly", "Apply nitrogen", "Harvest when cob hardens"],
-              "investment_pool": {
-                "total_staked": 28500,
-                "apy_estimate": 18.7,
-                "min_stake": 75,
-                "investors_count": 15,
-                "risk_level": "High" as const,
-                "liquidity_locked_until": "2025-10-10"
-              },
-              "ai_yield_prediction": {
-                "estimated_yield_tons": 15.3,
-                "confidence_score": 79,
-                "weather_risk_factor": 0.22,
-                "market_price_estimate": 195
-              }
-            },
-            {
-              "field_id": "F4",
-              "crop_name": "Barley",
-              "planting_date": "2025-06-17",
-              "expected_harvest_date": "2025-09-25",
-              "days_since_planting": 40,
-              "growth_progress_percent": 40,
-              "soil_moisture_percent": 53,
-              "temperature_celsius": 24.6,
-              "humidity_percent": 65,
-              "timeline_instructions": ["Sow seeds", "Thin out", "Apply fertilizers", "Harvest when heads are full"],
-              "investment_pool": {
-                "total_staked": 15200,
-                "apy_estimate": 11.8,
-                "min_stake": 100,
-                "investors_count": 8,
-                "risk_level": "Low" as const,
-                "liquidity_locked_until": "2025-09-30"
-              },
-              "ai_yield_prediction": {
-                "estimated_yield_tons": 6.7,
-                "confidence_score": 85,
-                "weather_risk_factor": 0.12,
-                "market_price_estimate": 245
-              }
-            },
-            {
-              "field_id": "F5",
-              "crop_name": "Soybean",
-              "planting_date": "2025-06-07",
-              "expected_harvest_date": "2025-09-25",
-              "days_since_planting": 50,
-              "growth_progress_percent": 45,
-              "soil_moisture_percent": 34,
-              "temperature_celsius": 18.9,
-              "humidity_percent": 47,
-              "timeline_instructions": ["Sow shallow", "Apply phosphorus", "Monitor pest", "Harvest when pods are dry"],
-              "investment_pool": {
-                "total_staked": 38900,
-                "apy_estimate": 14.3,
-                "min_stake": 50,
-                "investors_count": 21,
-                "risk_level": "Medium" as const,
-                "liquidity_locked_until": "2025-09-30"
-              },
-              "ai_yield_prediction": {
-                "estimated_yield_tons": 9.4,
-                "confidence_score": 88,
-                "weather_risk_factor": 0.18,
-                "market_price_estimate": 385
-              }
-            },
-            {
-              "field_id": "F6",
-              "crop_name": "Cotton",
-              "planting_date": "2025-04-28",
-              "expected_harvest_date": "2025-10-25",
-              "days_since_planting": 90,
-              "growth_progress_percent": 50,
-              "soil_moisture_percent": 63,
-              "temperature_celsius": 31.0,
-              "humidity_percent": 54,
-              "timeline_instructions": ["Sow with spacing", "Spray pesticides", "Prune", "Pick manually"],
-              "investment_pool": {
-                "total_staked": 52000,
-                "apy_estimate": 16.9,
-                "min_stake": 200,
-                "investors_count": 31,
-                "risk_level": "Medium" as const,
-                "liquidity_locked_until": "2025-10-30"
-              },
-              "ai_yield_prediction": {
-                "estimated_yield_tons": 4.2,
-                "confidence_score": 91,
-                "weather_risk_factor": 0.09,
-                "market_price_estimate": 1250
-              }
-            }
-          ]
-        };
+        // Fetch real farm data from API
+        const response = await fetch('/api/farming');
+        if (!response.ok) {
+          throw new Error('Failed to fetch farming data');
+        }
+        const enhancedFarmData = await response.json();
         
         setFarmData(enhancedFarmData);
         
@@ -660,9 +508,15 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
 
   const lowMoisture = field.soil_moisture_percent < 40;
   const expectedReturn = (field.ai_yield_prediction.estimated_yield_tons * field.ai_yield_prediction.market_price_estimate).toLocaleString();
+  const isActive = field.status === 'active';
+  const isAvailableSoon = field.status === 'available_soon';
 
   return (
-    <section className="relative bg-white/80 backdrop-blur-lg shadow-xl rounded-xl p-6 border border-emerald-100 hover:scale-[1.02] hover:shadow-emerald-300 transition-all duration-200 flex flex-col gap-4 overflow-hidden cursor-pointer group">
+    <section className={`relative backdrop-blur-lg shadow-xl rounded-xl p-6 border transition-all duration-200 flex flex-col gap-4 overflow-hidden cursor-pointer group ${
+      isActive 
+        ? 'bg-white/80 border-emerald-100 hover:scale-[1.02] hover:shadow-emerald-300' 
+        : 'bg-gray-50/80 border-gray-200 hover:scale-[1.01] hover:shadow-gray-200'
+    }`}>
       {/* Particle effect overlay */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300">
         <ParticleField
@@ -683,37 +537,61 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
           </div>
         </div>
         <div className="flex flex-col items-end gap-1">
-          {lowMoisture && (
+          {isAvailableSoon && (
+            <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow animate-bounce">
+              Available Soon
+            </span>
+          )}
+          {lowMoisture && isActive && (
             <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow animate-pulse">
               Low Moisture!
             </span>
           )}
-          <span className={`text-xs px-2 py-1 rounded-full font-medium ${riskColor(field.investment_pool.risk_level)}`}>
-            {field.investment_pool.risk_level} Risk
+          <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+            isActive ? riskColor(field.investment_pool.risk_level) : 'bg-gray-200 text-gray-600'
+          }`}>
+            {isActive ? `${field.investment_pool.risk_level} Risk` : 'Pending Launch'}
           </span>
         </div>
       </div>
 
       {/* Investment Pool Stats */}
-      <div className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg p-4 border border-emerald-200">
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          <div>
-            <p className="text-gray-700 font-medium">APY Estimate</p>
-            <p className="text-lg font-bold text-emerald-800">{field.investment_pool.apy_estimate}%</p>
+      <div className={`rounded-lg p-4 border ${
+        isActive 
+          ? 'bg-gradient-to-r from-emerald-50 to-blue-50 border-emerald-200'
+          : 'bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200'
+      }`}>
+        {isActive ? (
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <p className="text-gray-700 font-medium">APY Estimate</p>
+              <p className="text-lg font-bold text-emerald-800">{field.investment_pool.apy_estimate}%</p>
+            </div>
+            <div>
+              <p className="text-gray-700 font-medium">Total Staked</p>
+              <p className="text-lg font-bold text-blue-800">{field.investment_pool.total_staked.toLocaleString()}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 font-medium">Investors</p>
+              <p className="text-lg font-bold text-purple-800">{field.investment_pool.investors_count}</p>
+            </div>
+            <div>
+              <p className="text-gray-700 font-medium">Min Stake</p>
+              <p className="text-lg font-bold text-orange-800">{field.investment_pool.min_stake} $GUI</p>
+            </div>
           </div>
-          <div>
-            <p className="text-gray-700 font-medium">Total Staked</p>
-            <p className="text-lg font-bold text-blue-800">{field.investment_pool.total_staked.toLocaleString()}</p>
+        ) : (
+          <div className="text-center py-4">
+            <div className="text-2xl mb-2">🚀</div>
+            <p className="text-gray-600 font-medium">DeFi Pool Coming Soon</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Expected APY: <span className="font-bold text-gray-700">{field.investment_pool.apy_estimate}%</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              Min Stake: <span className="font-bold text-gray-700">{field.investment_pool.min_stake} $GUI</span>
+            </p>
           </div>
-          <div>
-            <p className="text-gray-700 font-medium">Investors</p>
-            <p className="text-lg font-bold text-purple-800">{field.investment_pool.investors_count}</p>
-          </div>
-          <div>
-            <p className="text-gray-700 font-medium">Min Stake</p>
-            <p className="text-lg font-bold text-orange-800">{field.investment_pool.min_stake} $GUI</p>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* AI Prediction */}
@@ -775,25 +653,40 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
       <div className="flex gap-2 mt-2">
         <button
           onClick={() => onViewDetails(field)}
-          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-emerald-500"
+          className={`flex-1 font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border ${
+            isActive 
+              ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500'
+              : 'bg-gray-600 hover:bg-gray-700 text-white border-gray-500'
+          }`}
           aria-label={`View details for ${field.crop_name} field ${field.field_id}`}
         >
+          <Eye size={16} />
           <span>View Details</span>
         </button>
-        {!walletConnected ? (
-          <button 
-            disabled
-            className="flex-1 bg-gray-500 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed shadow-lg border border-gray-400"
-          >
-            Connect Wallet
-          </button>
+        {isActive ? (
+          !walletConnected ? (
+            <button 
+              disabled
+              className="flex-1 bg-gray-500 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed shadow-lg border border-gray-400"
+            >
+              Connect Wallet
+            </button>
+          ) : (
+            <button
+              onClick={() => onViewDetails(field)}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-blue-500"
+            >
+              <DollarSign size={16} />
+              <span>Invest Now</span>
+            </button>
+          )
         ) : (
           <button
-            onClick={() => onViewDetails(field)}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-blue-500"
+            disabled
+            className="flex-1 bg-orange-400 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed shadow-lg border border-orange-300"
           >
-            <DollarSign size={16} />
-            <span>Invest</span>
+            <Sparkles size={16} />
+            <span>Coming Soon</span>
           </button>
         )}
       </div>

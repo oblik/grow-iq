@@ -51,8 +51,8 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
 ### Blockchain & Web3
 - **Wagmi 2.16.3**: React hooks for Ethereum
 - **Viem 2.33.3**: TypeScript interface for Ethereum
-- **OnchainKit**: Coinbase's blockchain toolkit
-- **Wallet SDK**: Multi-wallet connection support
+- **Infura**: Enterprise-grade blockchain infrastructure
+- **MetaMask & WalletConnect**: Multi-wallet connection support
 
 ### Authentication & Backend
 - **NextAuth.js**: Secure authentication system
@@ -70,7 +70,9 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
 ### Prerequisites
 - Node.js 18+ installed
 - Package manager (npm, yarn, or pnpm)
-- Web3 wallet (MetaMask, Coinbase Wallet, etc.)
+- Web3 wallet (MetaMask, WalletConnect compatible, etc.)
+- Infura API key (sign up at https://infura.io/)
+- WalletConnect Project ID (optional, for mobile wallet support)
 
 ### Installation
 
@@ -95,6 +97,8 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
    ```env
    NEXTAUTH_SECRET=your-secret-here
    NEXTAUTH_URL=http://localhost:3000
+   NEXT_PUBLIC_INFURA_API_KEY=your-infura-api-key
+   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your-walletconnect-project-id
    OPENAI_API_KEY=your-openai-key
    ```
 

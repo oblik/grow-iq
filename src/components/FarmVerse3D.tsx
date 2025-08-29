@@ -30,13 +30,18 @@ type Field = {
   humidity_percent: number;
   timeline_instructions: string[];
   investment_pool: {
+    pool_id: number;
     total_staked: number;
     apy_estimate: number;
     min_stake: number;
+    max_stake: number;
     investors_count: number;
     risk_level: 'Low' | 'Medium' | 'High';
     liquidity_locked_until: string;
+    is_active: boolean;
+    contract_deployed: boolean;
   };
+  status: 'active' | 'available_soon';
   ai_yield_prediction: {
     estimated_yield_tons: number;
     confidence_score: number;

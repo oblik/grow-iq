@@ -1,28 +1,13 @@
 'use client'
 
-import React from 'react'
-import { Transaction, TransactionButton, TransactionStatus, TransactionStatusAction, TransactionStatusLabel } from '@coinbase/onchainkit/transaction'
+import React, { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { base } from 'wagmi/chains'
 import { useHydration } from '@/hooks/useHydration'
+import { RealTransactionComponent } from './RealTransactionComponent'
 
 export function TransactionComponent() {
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
   const isHydrated = useHydration()
-
-  const handleOnStatus = (status: any) => {
-    console.log('Transaction status:', status)
-  }
-
-  // Example agricultural smart contract interaction
-  // This simulates staking tokens in a crop investment pool
-  const transactionCalls = React.useMemo(() => [
-    {
-      to: '0x4200000000000000000000000000000000000006' as `0x${string}`, // WETH on Base (example)
-      value: BigInt('0'), // No direct ETH value for contract call
-      data: '0xa9059cbb0000000000000000000000004200000000000000000000000000000000000006000000000000000000000000000000000000000000000000002386f26fc10000' as `0x${string}`, // ERC20 transfer example
-    }
-  ], [])
 
   if (!isHydrated) {
     return (
@@ -43,35 +28,19 @@ export function TransactionComponent() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Agricultural Payments</h3>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Agricultural Investments</h3>
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        Stake tokens in agricultural investment pools or send payments to farmers
+        Stake GUI tokens in real farming operations and earn yields based on harvest outcomes.
       </p>
       
-      {isHydrated && address && transactionCalls && transactionCalls.length > 0 ? (
-        <Transaction
-          chainId={base.id}
-          calls={transactionCalls}
-          onStatus={handleOnStatus}
-        >
-          <TransactionButton
-            text="Stake in Crop Pool (Demo)"
-            disabled={!address}
-          />
-          <TransactionStatus>
-            <TransactionStatusLabel />
-            <TransactionStatusAction />
-          </TransactionStatus>
-        </Transaction>
-      ) : (
-        <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-          <p className="text-gray-600">Transaction interface will appear here once wallet is connected</p>
-          <p className="text-sm text-gray-500 mt-2">Connect your wallet to access agricultural payment features</p>
-        </div>
-      )}
+      <RealTransactionComponent 
+        poolId={0}
+        fieldName="Wheat Farm F1"
+      />
       
-      <div className="text-xs text-gray-500 bg-yellow-50 border border-yellow-200 rounded p-3">
-        <strong>Note:</strong> This is a demo transaction. In production, this would integrate with your agricultural investment pools and smart contracts.
+      <div className="text-xs text-gray-500 bg-green-50 border border-green-200 rounded p-3">
+        <strong>🌾 Active Pool:</strong> Field F1 (Wheat) is live with real smart contracts on testnet. 
+        Other fields will be available soon as we expand the platform.
       </div>
     </div>
   )
