@@ -2,7 +2,7 @@
 
 **Revolutionizing Agriculture with Blockchain Technology and AI**
 
-GrowIQ DeFi is an innovative decentralized finance platform that bridges traditional agriculture with blockchain technology. Users can invest in real farming operations, track crop growth through IoT sensors, and earn yields based on actual harvest outcomes.
+GrowIQ DeFi is an innovative decentralized finance platform that bridges traditional agriculture with blockchain technology. Built on OneChain (SUI-based blockchain) for fast, low-cost transactions, users can invest in real farming operations, track crop growth through IoT sensors, and earn yields based on actual harvest outcomes.
 
 ## Project Demo
 
@@ -49,13 +49,19 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
 - **Lucide React**: Beautiful icon library
 
 ### Blockchain & Web3
-- **Wagmi 2.16.3**: React hooks for Ethereum
+- **OneChain (SUI-based)**: Primary blockchain for authentication and transactions
+  - **@mysten/dapp-kit**: Official OneChain/SUI dApp development kit
+  - **@mysten/sui**: Core SDK for OneChain/SUI blockchain interaction
+  - **OCT Token**: Native OneChain token for gas and transactions
+- **Wagmi 2.16.3**: React hooks for Ethereum (secondary support)
 - **Viem 2.33.3**: TypeScript interface for Ethereum
 - **Infura**: Enterprise-grade blockchain infrastructure
-- **MetaMask & WalletConnect**: Multi-wallet connection support
+- **Multi-Wallet Support**: OneChain wallets, MetaMask, WalletConnect
 
 ### Authentication & Backend
 - **NextAuth.js**: Secure authentication system
+  - **OneChain Wallet Auth**: Signature-based authentication using OneChain wallets
+  - **Credentials Provider**: Custom authentication for blockchain wallets
 - **Prisma Adapter**: Database integration
 - **OpenAI**: AI-powered chat assistance
 - **TanStack Query**: Data fetching and caching
@@ -70,8 +76,9 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
 ### Prerequisites
 - Node.js 18+ installed
 - Package manager (npm, yarn, or pnpm)
-- Web3 wallet (MetaMask, WalletConnect compatible, etc.)
-- Infura API key (sign up at https://infura.io/)
+- OneChain-compatible wallet (Sui Wallet, Martian, Suiet, etc.)
+- Web3 wallet (MetaMask, WalletConnect compatible, etc.) - optional
+- Infura API key (sign up at https://infura.io/) - for Ethereum support
 - WalletConnect Project ID (optional, for mobile wallet support)
 
 ### Installation
@@ -97,8 +104,15 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
    ```env
    NEXTAUTH_SECRET=your-secret-here
    NEXTAUTH_URL=http://localhost:3000
+   
+   # OneChain Configuration (optional - defaults to devnet)
+   NEXT_PUBLIC_ONECHAIN_NETWORK=devnet # Options: devnet, testnet, mainnet
+   
+   # Ethereum Support (optional)
    NEXT_PUBLIC_INFURA_API_KEY=your-infura-api-key
    NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your-walletconnect-project-id
+   
+   # AI Features
    OPENAI_API_KEY=your-openai-key
    ```
 
@@ -112,13 +126,68 @@ Click the image above or [watch on YouTube](https://youtu.be/R0RJ2Up2V8E) to see
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+## OneChain Integration
+
+### Overview
+GrowIQ uses OneChain (a SUI-based blockchain) as the primary authentication and transaction layer. OneChain provides fast, low-cost transactions with native support for Move smart contracts.
+
+### Key Features
+- **Wallet-Based Authentication**: Sign in using your OneChain wallet address
+- **OCT Token Support**: Native OneChain token for transactions and gas fees
+- **Signature Verification**: Secure message signing for authentication
+- **Multi-Network Support**: Connect to Devnet, Testnet, or Mainnet
+- **Real-Time Balance Updates**: Track OCT balance in real-time
+
+### OneChain Components
+
+#### Wallet Provider (`src/contexts/OneChainWalletProvider.tsx`)
+Wraps the application with OneChain SDK providers for wallet connectivity.
+
+#### Wallet Context (`src/contexts/WalletContext.tsx`)
+Manages wallet state, balance queries, and connection status across the app.
+
+#### Authentication Hook (`src/hooks/useOneChainAuth.ts`)
+Handles wallet-based authentication flow with signature verification.
+
+#### Wallet Button (`src/components/OneChainWalletButton.tsx`)
+Provides UI for connecting and managing OneChain wallets.
+
+#### Configuration (`src/config/onechain.ts`)
+Defines network endpoints and configuration for OneChain networks.
+
+### Getting Test Tokens
+To get test OCT tokens on devnet:
+```bash
+# Using OneChain CLI
+one client faucet --address YOUR_ADDRESS
+
+# Or visit the web faucet
+https://faucet.devnet.onelabs.cc
+```
+
+### Demo Page
+Explore all OneChain features at `/onechain-demo`:
+- Test wallet connection
+- Authenticate with signature
+- Send test transactions
+- View balance and account info
+
 ## Usage Guide
 
 ### Connecting Your Wallet
-1. Click "Connect Wallet" in the top navigation
-2. Choose your preferred wallet provider
+
+#### OneChain Wallet (Primary)
+1. Click "Connect OneChain" in the top navigation
+2. Choose your OneChain-compatible wallet (Sui Wallet, Martian, Suiet)
 3. Approve the connection request
-4. Your $GUI balance will be displayed
+4. Sign the authentication message to create a session
+5. Your OCT balance will be displayed
+
+#### Ethereum Wallet (Secondary)
+1. Click "Connect Wallet" for Ethereum options
+2. Choose MetaMask or WalletConnect
+3. Approve the connection request
+4. Your ETH balance will be displayed
 
 ### Making Investments
 1. Browse available farming pools on the dashboard
@@ -185,10 +254,18 @@ Real-time data is managed through:
 - Blockchain for transaction records
 
 ### Security Features
-- NextAuth.js session management
-- Secure wallet connections
-- Encrypted API communications
-- Input validation and sanitization
+- **OneChain Wallet Authentication**
+  - Signature-based authentication
+  - Message signing verification
+  - Session persistence with JWT
+- **NextAuth.js session management**
+  - Secure credential provider for OneChain
+  - Protected API routes
+- **Secure wallet connections**
+  - Standard wallet adapter protocol
+  - Auto-disconnect on network changes
+- **Encrypted API communications**
+- **Input validation and sanitization**
 
 ## Project Structure
 
@@ -201,14 +278,22 @@ grow-iq/
 │   │   ├── layout.tsx      # Root layout
 │   │   └── page.tsx        # Home page
 │   ├── components/         # React components
-│   │   ├── AuthButton.tsx  # Authentication
+│   │   ├── OneChainWalletButton.tsx # OneChain wallet connection
+│   │   ├── WalletConnector.tsx # Ethereum wallet connection
 │   │   ├── MainDashboard.tsx # Main dashboard
 │   │   ├── FarmVerse3D.tsx # 3D visualization
 │   │   ├── HolographicUI.tsx # UI elements
 │   │   └── ...            # Other components
 │   ├── contexts/          # React contexts
+│   │   ├── WalletContext.tsx # Unified wallet state management
+│   │   └── OneChainWalletProvider.tsx # OneChain SDK provider
 │   ├── hooks/             # Custom hooks
+│   │   ├── useOneChainAuth.ts # OneChain authentication hook
+│   │   └── useHydration.ts # Client-side hydration
 │   ├── lib/               # Utility libraries
+│   │   └── auth.ts        # NextAuth configuration with OneChain
+│   ├── config/            # Configuration files
+│   │   └── onechain.ts    # OneChain network configuration
 │   ├── types/             # TypeScript types
 │   └── utils/             # Helper functions
 ├── public/                # Static assets
@@ -229,9 +314,10 @@ grow-iq/
 
 ### Phase 2: Advanced DeFi Features
 - [ ] Liquidity pools and automated market makers
-- [ ] Cross-chain farming opportunities
+- [ ] Cross-chain farming opportunities (OneChain <-> Ethereum)
 - [ ] Insurance and risk mitigation tools
 - [ ] Governance token voting system
+- [ ] OneChain Move smart contracts for farming pools
 
 ### Phase 3: Ecosystem Expansion
 - [ ] Mobile application
@@ -261,6 +347,8 @@ We welcome contributions from the community! Please follow these steps:
 - Write descriptive commit messages
 - Test features thoroughly before submitting
 - Update documentation for new features
+- Test OneChain integration on devnet before mainnet
+- Ensure wallet connection error handling
 
 ## Performance Metrics
 
@@ -277,7 +365,35 @@ We welcome contributions from the community! Please follow these steps:
 - **$160K+ Staked**: Community investment volume
 - **Multiple Risk Levels**: Conservative to aggressive options
 
+## Supported Wallets & Networks
+
+### OneChain Wallets
+- **Sui Wallet**: Official wallet for SUI/OneChain
+- **Martian Wallet**: Multi-chain wallet with OneChain support
+- **Suiet Wallet**: Feature-rich OneChain wallet
+- **Ethos Wallet**: User-friendly OneChain wallet
+
+### OneChain Networks
+- **Devnet**: Development network for testing
+  - RPC: `https://rpc-devnet.onelabs.cc:443`
+  - Faucet available for test tokens
+- **Testnet**: Public test network
+  - RPC: `https://rpc-testnet.onelabs.cc:443`
+  - Stable testing environment
+- **Mainnet**: Production network
+  - RPC: `https://rpc-mainnet.onelabs.cc:443`
+  - Real value transactions
+
+### Ethereum Support (Secondary)
+- **MetaMask**: Popular Ethereum wallet
+- **WalletConnect**: Mobile wallet protocol
+- **Rainbow**: Mobile-first wallet
+- **Coinbase Wallet**: Exchange-integrated wallet
+
 ## FAQ
+
+### Q: What is OneChain and OCT token?
+A: OneChain is a SUI-based blockchain that GrowIQ uses for authentication and transactions. OCT (OneChain Token) is the native token used for gas fees and transactions on the OneChain network.
 
 ### Q: What is $GUI token?
 A: $GUI is the native utility token of GrowIQ platform, used for staking in farming pools, governance voting, and earning rewards.

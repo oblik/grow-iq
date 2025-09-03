@@ -14,7 +14,10 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
-    "@tanstack/react-query": "^5.85.3",
+    "@mysten/dapp-kit": "^0.17.7",
+    "@mysten/sui": "^1.37.6",
+    "@mysten/wallet-standard": "^0.16.14",
+    "@tanstack/react-query": "^5.85.9",
     "lucide-react": "^0.526.0",
     "next": "15.4.4",
     "next-auth": "^4.24.11",

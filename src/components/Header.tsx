@@ -1,7 +1,7 @@
 'use client'
 
-import { AuthButton } from './AuthButton'
 import { WalletConnector } from './WalletConnector'
+import { OneChainWalletButton } from './OneChainWalletButton'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
@@ -16,7 +16,8 @@ export function Header() {
           
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <AuthButton />
+            <OneChainWalletButton />
+            {/* Keeping WalletConnector for Ethereum wallets */}
             <WalletConnector />
           </div>
         </div>

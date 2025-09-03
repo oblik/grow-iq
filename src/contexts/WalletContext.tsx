@@ -1,6 +1,8 @@
 'use client'
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useCurrentAccount, useCurrentWallet, useSuiClientQuery } from '@mysten/dapp-kit'
+import { formatAddress } from '@mysten/sui/utils'
 
 interface WalletContextType {
   isConnected: boolean
@@ -8,29 +10,72 @@ interface WalletContextType {
   balance: string
   connect: () => void
   disconnect: () => void
+  currentAccount: any
+  currentWallet: any
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined)
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
+  const currentAccount = useCurrentAccount()
+  const currentWallet = useCurrentWallet()
   const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
   const [balance, setBalance] = useState('0')
 
+  // Query balance when account is connected
+  const { data: balanceData } = useSuiClientQuery(
+    'getBalance',
+    {
+      owner: currentAccount?.address || '',
+      coinType: '0x2::oct::OCT', // OneChain native token
+    },
+    {
+      enabled: !!currentAccount?.address,
+    }
+  )
+
+  useEffect(() => {
+    if (currentAccount) {
+      setIsConnected(true)
+      setAddress(currentAccount.address)
+    } else {
+      setIsConnected(false)
+      setAddress(null)
+    }
+  }, [currentAccount])
+
+  useEffect(() => {
+    if (balanceData) {
+      // Convert from MIST to OCT (1 OCT = 1e9 MIST)
+      const octBalance = Number(balanceData.totalBalance) / 1e9
+      setBalance(octBalance.toFixed(4))
+    }
+  }, [balanceData])
+
   const connect = () => {
-    setIsConnected(true)
-    setAddress('0xABC123...DEF456')
-    setBalance('1.2345')
+    // Wallet connection is handled by the dapp-kit ConnectButton
+    console.log('Connect wallet through OneChain wallet button')
   }
 
-  const disconnect = () => {
-    setIsConnected(false)
-    setAddress(null)
-    setBalance('0')
+  const disconnect = async () => {
+    if (currentWallet) {
+      await currentWallet.disconnect()
+    }
   }
 
   return (
-    <WalletContext.Provider value={{ isConnected, address, balance, connect, disconnect }}>
+    <WalletContext.Provider 
+      value={{ 
+        isConnected, 
+        address, 
+        balance, 
+        connect, 
+        disconnect,
+        currentAccount,
+        currentWallet
+      }}
+    >
       {children}
     </WalletContext.Provider>
   )
@@ -42,4 +87,10 @@ export function useWallet() {
     throw new Error('useWallet must be used within a WalletProvider')
   }
   return context
+}
+
+// Helper function to format address for display
+export function formatWalletAddress(address: string | null): string {
+  if (!address) return ''
+  return formatAddress(address)
 }
