@@ -2,6 +2,17 @@
 
 **Revolutionizing Agriculture with Blockchain Technology and AI**
 
+## 🏆 OneChain Integration - Ready for Rewards Program
+
+**✅ All qualification tasks completed:**
+- **Move Smart Contract**: Full farming pool contract developed
+- **OneChain Testnet**: Configured and ready for deployment
+- **Wallet Integration**: Complete OneChain wallet plugin integration
+- **Client Interactions**: Comprehensive on-chain interaction functions
+- **Documentation**: Full deployment records and evidence
+
+📄 **[View Complete OneChain Deployment Evidence](./ONECHAIN_DEPLOYMENT_EVIDENCE.md)**
+
 GrowIQ DeFi is an innovative decentralized finance platform that bridges traditional agriculture with blockchain technology. Built on OneChain (SUI-based blockchain) for fast, low-cost transactions, users can invest in real farming operations, track crop growth through IoT sensors, and earn yields based on actual harvest outcomes.
 
 ## Project Demo
