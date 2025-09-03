@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { useCurrentAccount, useCurrentWallet, useSuiClientQuery } from '@mysten/dapp-kit'
+import { useCurrentAccount, useCurrentWallet, useSuiClientQuery, useDisconnectWallet } from '@mysten/dapp-kit'
 import { formatAddress } from '@mysten/sui/utils'
 
 interface WalletContextType {
@@ -19,6 +19,7 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined)
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const currentAccount = useCurrentAccount()
   const currentWallet = useCurrentWallet()
+  const { mutate: disconnectWallet } = useDisconnectWallet()
   const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
   const [balance, setBalance] = useState('0')
@@ -58,10 +59,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     console.log('Connect wallet through OneChain wallet button')
   }
 
-  const disconnect = async () => {
-    if (currentWallet) {
-      await currentWallet.disconnect()
-    }
+  const disconnect = () => {
+    disconnectWallet()
   }
 
   return (
