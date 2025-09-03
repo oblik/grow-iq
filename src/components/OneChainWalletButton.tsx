@@ -1,13 +1,34 @@
 'use client'
 
-import { ConnectButton, useCurrentAccount } from '@mysten/dapp-kit'
+import { ConnectButton, useCurrentAccount, useSuiClientQuery, useDisconnectWallet } from '@mysten/dapp-kit'
 import { formatAddress } from '@mysten/sui/utils'
 import { Wallet, LogOut, User } from 'lucide-react'
-import { useWallet } from '@/contexts/WalletContext'
+import { useEffect, useState } from 'react'
 
 export function OneChainWalletButton() {
   const currentAccount = useCurrentAccount()
-  const { balance, disconnect } = useWallet()
+  const { mutate: disconnect } = useDisconnectWallet()
+  const [balance, setBalance] = useState('0')
+
+  // Query balance when account is connected
+  const { data: balanceData } = useSuiClientQuery(
+    'getBalance',
+    {
+      owner: currentAccount?.address || '',
+      coinType: '0x2::sui::SUI', // Using SUI for testnet
+    },
+    {
+      enabled: !!currentAccount?.address,
+    }
+  )
+
+  useEffect(() => {
+    if (balanceData) {
+      // Convert from MIST to SUI (1 SUI = 1e9 MIST)
+      const suiBalance = Number(balanceData.totalBalance) / 1e9
+      setBalance(suiBalance.toFixed(4))
+    }
+  }, [balanceData])
 
   return (
     <div className="flex items-center gap-2">
@@ -25,7 +46,7 @@ export function OneChainWalletButton() {
           </div>
           <div className="flex items-center gap-1 text-sm">
             <span className="text-gray-400">Balance:</span>
-            <span className="font-bold text-white">{balance} OCT</span>
+            <span className="font-bold text-white">{balance} SUI</span>
           </div>
           <button
             onClick={() => disconnect()}

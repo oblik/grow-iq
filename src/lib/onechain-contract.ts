@@ -86,23 +86,19 @@ export async function calculateRewards(
 ) {
   const client = getOneChainClient();
   
-  // This would be a view function call
+  // Create a transaction for inspection
+  const tx = new Transaction();
+  tx.moveCall({
+    target: `${CONTRACT_CONFIG.packageId}::${CONTRACT_CONFIG.farmingPoolModule}::calculate_rewards`,
+    arguments: [
+      tx.object(poolId),
+      tx.pure.address(stakerAddress),
+      tx.object('0x6'), // Clock
+    ],
+  });
+  
   const result = await client.devInspectTransactionBlock({
-    transactionBlock: {
-      inputs: [
-        { type: 'object', objectId: poolId },
-        { type: 'pure', value: stakerAddress },
-        { type: 'object', objectId: '0x6' }, // Clock
-      ],
-      transactions: [
-        {
-          MoveCall: {
-            target: `${CONTRACT_CONFIG.packageId}::${CONTRACT_CONFIG.farmingPoolModule}::calculate_rewards`,
-            arguments: [0, 1, 2],
-          },
-        },
-      ],
-    },
+    transactionBlock: tx,
     sender: stakerAddress,
   });
 

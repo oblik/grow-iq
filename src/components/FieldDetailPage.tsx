@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowLeft, TrendingUp, DollarSign, Users, Target, Clock, Droplets, Thermometer, Activity, Wallet } from 'lucide-react';
+import { InvestmentModal } from './InvestmentModal';
+import { useCurrentAccount } from '@mysten/dapp-kit';
+import { OneChainWalletButton } from './OneChainWalletButton';
 
 // ---- Field Detail Page Component ----
 interface FieldDetailPageProps {
@@ -15,12 +18,15 @@ interface FieldDetailPageProps {
     humidity_percent: number;
     timeline_instructions: string[];
     investment_pool: {
+      pool_id?: number;
       total_staked: number;
       apy_estimate: number;
       min_stake: number;
+      max_stake?: number;
       investors_count: number;
       risk_level: 'Low' | 'Medium' | 'High';
       liquidity_locked_until: string;
+      is_active?: boolean;
     };
     ai_yield_prediction: {
       estimated_yield_tons: number;
@@ -36,16 +42,16 @@ interface FieldDetailPageProps {
 function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProps) {
   const [stakeAmount, setStakeAmount] = useState(field.investment_pool.min_stake);
   const [isStaking, setIsStaking] = useState(false);
+  const [showInvestmentModal, setShowInvestmentModal] = useState(false);
+  const currentAccount = useCurrentAccount();
   
   const handleStake = async () => {
-    if (!walletConnected || stakeAmount < field.investment_pool.min_stake) return;
-    
-    setIsStaking(true);
-    // Simulate staking process
-    setTimeout(() => {
-      alert(`✅ Successfully staked ${stakeAmount} $GUI in ${field.crop_name} field!\n\nTransaction Details:\n• Amount: ${stakeAmount} $GUI\n• Expected APY: ${field.investment_pool.apy_estimate}%\n• Lock Period: Until harvest\n• Field: ${field.field_id}`);
-      setIsStaking(false);
-    }, 2000);
+    setShowInvestmentModal(true);
+  };
+  
+  const handleInvestmentSuccess = () => {
+    setShowInvestmentModal(false);
+    // Refresh data or show success notification
   };
 
   // Helper functions
@@ -298,28 +304,31 @@ function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProp
                   </div>
                 </div>
 
-                {!walletConnected ? (
-                  <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                    <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
-                      <Wallet size={16} />
-                      <span className="text-sm font-medium">Connect your wallet to invest</span>
+                {!currentAccount ? (
+                  <div className="mt-4 space-y-3">
+                    <div className="p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                      <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
+                        <Wallet size={16} />
+                        <span className="text-sm font-medium">Connect your OneChain wallet to invest</span>
+                      </div>
                     </div>
+                    <OneChainWalletButton />
                   </div>
                 ) : (
                   <button
                     onClick={handleStake}
                     disabled={isStaking || stakeAmount < field.investment_pool.min_stake}
-                    className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full mt-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
                   >
                     {isStaking ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Staking...
+                        Processing...
                       </>
                     ) : (
                       <>
                         <DollarSign size={16} />
-                        Stake {stakeAmount} $GUI
+                        Invest {stakeAmount} GUI
                       </>
                     )}
                   </button>
@@ -347,6 +356,22 @@ function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProp
           </div>
         </div>
       </main>
+      
+      {/* Investment Modal */}
+      <InvestmentModal
+        field={{
+          ...field,
+          investment_pool: {
+            ...field.investment_pool,
+            pool_id: field.investment_pool.pool_id || Math.floor(Math.random() * 1000),
+            max_stake: field.investment_pool.max_stake || 10000,
+            is_active: field.investment_pool.is_active !== false
+          }
+        }}
+        isOpen={showInvestmentModal}
+        onClose={() => setShowInvestmentModal(false)}
+        onSuccess={handleInvestmentSuccess}
+      />
     </div>
   );
 }

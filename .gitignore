@@ -39,3 +39,38 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Move/Sui build artifacts
+contracts/move/build/
+contracts/move/.move/
+Move.lock
+*.mv
+*.mvsm
+
+# Sui CLI and wallet files
+.sui/
+*.key
+*.keystore
+sui
+sui-*
+move-analyzer
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/

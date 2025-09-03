@@ -74,24 +74,17 @@ async function demonstrateOneChainTransaction() {
     ],
   });
   
-  // Operation 3: Emit event
-  complexTx.moveCall({
-    target: '0x2::event::emit',
-    typeArguments: ['0xPACKAGE_ID::farming_pool::Staked'],
-    arguments: [
-      complexTx.pure({
-        pool_id: '0xPOOL_ID',
-        staker: WALLET_ADDRESS,
-        amount: 5000000000,
-        timestamp: Date.now(),
-      }),
-    ],
-  });
+  // Operation 3: Transfer remaining to another address
+  const [remainingCoin] = complexTx.splitCoins(complexTx.gas, [1000000]); // 0.001 SUI
+  complexTx.transferObjects(
+    [remainingCoin], 
+    '0x0000000000000000000000000000000000000000000000000000000000000001'
+  );
   
   console.log("Complex transaction created with:");
   console.log("- Coin splitting (5 SUI)");
   console.log("- Staking in farming pool");
-  console.log("- Event emission");
+  console.log("- Transfer remaining coins");
   console.log("");
 
   // Transaction signing simulation

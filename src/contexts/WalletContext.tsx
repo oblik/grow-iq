@@ -29,7 +29,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     'getBalance',
     {
       owner: currentAccount?.address || '',
-      coinType: '0x2::oct::OCT', // OneChain native token
+      coinType: '0x2::sui::SUI', // Using SUI for testnet
     },
     {
       enabled: !!currentAccount?.address,
@@ -48,9 +48,9 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (balanceData) {
-      // Convert from MIST to OCT (1 OCT = 1e9 MIST)
-      const octBalance = Number(balanceData.totalBalance) / 1e9
-      setBalance(octBalance.toFixed(4))
+      // Convert from MIST to SUI (1 SUI = 1e9 MIST)
+      const suiBalance = Number(balanceData.totalBalance) / 1e9
+      setBalance(suiBalance.toFixed(4))
     }
   }, [balanceData])
 

@@ -2,7 +2,6 @@
 
 import { createNetworkConfig, SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
 import { getFullnodeUrl } from '@mysten/sui/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@mysten/dapp-kit/dist/index.css';
 
 // Create network configuration
@@ -12,16 +11,12 @@ const { networkConfig } = createNetworkConfig({
   mainnet: { url: 'https://rpc-mainnet.onelabs.cc:443' },
 });
 
-const queryClient = new QueryClient();
-
 export function OneChainWalletProvider({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
-        <WalletProvider autoConnect={true}>
-          {children}
-        </WalletProvider>
-      </SuiClientProvider>
-    </QueryClientProvider>
+    <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+      <WalletProvider autoConnect={true}>
+        {children}
+      </WalletProvider>
+    </SuiClientProvider>
   );
 }
