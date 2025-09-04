@@ -85,7 +85,7 @@ export default function WalletDebugPage() {
           {currentAccount ? (
             <div className="space-y-2">
               <p><strong>Address:</strong> {currentAccount.address}</p>
-              <p><strong>Wallet:</strong> {currentWallet?.name || 'Unknown'}</p>
+              <p><strong>Wallet:</strong> {currentWallet && 'name' in currentWallet ? (currentWallet as any).name : 'Unknown'}</p>
             </div>
           ) : (
             <p className="text-gray-400">Not connected</p>

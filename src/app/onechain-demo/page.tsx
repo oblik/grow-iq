@@ -106,25 +106,16 @@ export default function OneChainDemoPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-300">Auth Status:</span>
-                  <span className={`font-medium ${isAuthenticated ? 'text-green-600' : 'text-yellow-600'}`}>
-                    {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
+                  <span className={`font-medium ${currentAccount ? 'text-green-600' : 'text-yellow-600'}`}>
+                    {currentAccount ? 'Connected' : 'Not Connected'}
                   </span>
                 </div>
 
-                {session && (
+                {currentAccount && (
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-300">Session User:</span>
-                    <span className="font-medium">{session.user?.name || 'OneChain User'}</span>
+                    <span className="text-gray-600 dark:text-gray-300">Wallet User:</span>
+                    <span className="font-medium">OneChain User</span>
                   </div>
-                )}
-
-                {currentAccount && !isAuthenticated && (
-                  <button
-                    onClick={authenticate}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Authenticate with OneChain
-                  </button>
                 )}
               </div>
             </div>

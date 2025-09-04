@@ -110,8 +110,8 @@ export function NetworkSwitcher() {
             {/* RPC Info */}
             <div className="text-xs text-gray-500 dark:text-gray-400">
               <p>RPC: {currentNetwork === 'sui' ? 'fullnode.testnet.sui.io' : 'rpc-testnet.onelabs.cc'}</p>
-              {currentWallet && (
-                <p>Wallet: {currentWallet.name}</p>
+              {currentWallet && 'name' in currentWallet && (
+                <p>Wallet: {(currentWallet as any).name}</p>
               )}
             </div>
           </div>

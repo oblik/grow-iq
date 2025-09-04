@@ -265,7 +265,7 @@ function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProp
                 
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 dark:text-gray-400">Total Staked</span>
-                  <span className="text-lg font-bold text-blue-700 dark:text-blue-400">{field.investment_pool.total_staked.toLocaleString()} $GUI</span>
+                  <span className="text-lg font-bold text-blue-700 dark:text-blue-400">{field.investment_pool.total_staked.toLocaleString()} $OCT</span>
                 </div>
                 
                 <div className="flex justify-between items-center">
@@ -275,14 +275,14 @@ function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProp
                 
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 dark:text-gray-400">Min Stake</span>
-                  <span className="text-lg font-bold text-orange-700 dark:text-orange-400">{field.investment_pool.min_stake} $GUI</span>
+                  <span className="text-lg font-bold text-orange-700 dark:text-orange-400">{field.investment_pool.min_stake} $OCT</span>
                 </div>
               </div>
 
               {/* Investment Form */}
               <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Stake Amount ($GUI)
+                  Stake Amount ($OCT)
                 </label>
                 <input
                   type="number"
@@ -290,7 +290,7 @@ function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProp
                   onChange={(e) => setStakeAmount(Number(e.target.value))}
                   min={field.investment_pool.min_stake}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
-                  placeholder={`Min: ${field.investment_pool.min_stake} $GUI`}
+                  placeholder={`Min: ${field.investment_pool.min_stake} $OCT`}
                 />
                 
                 <div className="mt-4 space-y-2 text-sm">
@@ -328,7 +328,7 @@ function FieldDetailPage({ field, onBack, walletConnected }: FieldDetailPageProp
                     ) : (
                       <>
                         <DollarSign size={16} />
-                        Invest {stakeAmount} GUI
+                        Invest {stakeAmount} OCT
                       </>
                     )}
                   </button>

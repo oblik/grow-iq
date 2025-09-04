@@ -103,7 +103,7 @@ export default function Page() {
   useEffect(() => {
     if (balance && walletConnected) {
       const balanceNum = parseFloat(balance) || 0;
-      // Convert SUI balance to GUI tokens (using 1000 as conversion rate for demo)
+      // Balance is already in OCT tokens
       const guiBalance = balanceNum * 1000;
       
       setUserPortfolio(prev => ({
@@ -251,7 +251,7 @@ export default function Page() {
           <div>
             <h1 className="text-4xl font-bold text-emerald-800 mb-2 drop-shadow-lg flex items-center gap-3">
               🌱 GrowIQ DeFi Platform
-              <span className="text-sm bg-emerald-600 text-white px-3 py-1 rounded-full shadow-lg">Powered by $GUI</span>
+              <span className="text-sm bg-emerald-600 text-white px-3 py-1 rounded-full shadow-lg">Powered by $OCT</span>
             </h1>
             <p className="text-gray-800 text-lg font-medium">
               Real-Time Agri Investment | Live IoT Data |{" "}
@@ -280,7 +280,7 @@ export default function Page() {
                 onClick={() => navigateToPage('staking')}
                 className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-lg border border-purple-500"
               >
-                Stake $GUI
+                Stake $OCT
               </button>
             </nav>
             
@@ -294,7 +294,7 @@ export default function Page() {
                     {balance ? `${balance} SUI` : '0 SUI'}
                   </p>
                   <p className="text-xs text-gray-600">
-                    ≈ {userPortfolio.total_gui_balance.toFixed(0)} GUI
+                    ≈ {userPortfolio.total_gui_balance.toFixed(0)} OCT
                   </p>
                 </div>
                 {walletType === 'onechain' && (
@@ -329,7 +329,7 @@ export default function Page() {
               <h3 className="font-semibold text-gray-700">Total Staked</h3>
             </div>
             <p className="text-2xl font-bold text-emerald-800">
-              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.total_staked, 0).toLocaleString()} $GUI
+              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.total_staked, 0).toLocaleString()} $OCT
             </p>
           </div>
           
@@ -548,7 +548,7 @@ function EnhancedFieldCard({ field, onViewDetails, onInvestment, walletConnected
             </div>
             <div>
               <p className="text-gray-700 font-medium">Min Stake</p>
-              <p className="text-lg font-bold text-orange-800">{field.investment_pool.min_stake} $GUI</p>
+              <p className="text-lg font-bold text-orange-800">{field.investment_pool.min_stake} $OCT</p>
             </div>
           </div>
         ) : (
@@ -559,7 +559,7 @@ function EnhancedFieldCard({ field, onViewDetails, onInvestment, walletConnected
               Expected APY: <span className="font-bold text-gray-700">{field.investment_pool.apy_estimate}%</span>
             </p>
             <p className="text-sm text-gray-500">
-              Min Stake: <span className="font-bold text-gray-700">{field.investment_pool.min_stake} $GUI</span>
+              Min Stake: <span className="font-bold text-gray-700">{field.investment_pool.min_stake} $OCT</span>
             </p>
           </div>
         )}
@@ -696,7 +696,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-emerald-900 mb-2">My Portfolio</h1>
-          <p className="text-gray-600">Track your $GUI investments and farming returns</p>
+          <p className="text-gray-600">Track your $OCT investments and farming returns</p>
         </div>
 
         {!walletConnected ? (
@@ -717,7 +717,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                   <DollarSign className="text-emerald-600" size={24} />
                   <span className="text-sm font-medium text-gray-600">Total Balance</span>
                 </div>
-                <p className="text-2xl font-bold text-emerald-700">{portfolio.total_gui_balance.toLocaleString()} $GUI</p>
+                <p className="text-2xl font-bold text-emerald-700">{portfolio.total_gui_balance.toLocaleString()} $OCT</p>
                 <p className="text-sm text-gray-500">${(portfolio.total_gui_balance * 1.85).toLocaleString()} USD</p>
               </div>
 
@@ -726,7 +726,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                   <Target className="text-blue-600" size={24} />
                   <span className="text-sm font-medium text-gray-600">Total Staked</span>
                 </div>
-                <p className="text-2xl font-bold text-blue-700">{portfolio.total_staked.toLocaleString()} $GUI</p>
+                <p className="text-2xl font-bold text-blue-700">{portfolio.total_staked.toLocaleString()} $OCT</p>
                 <p className="text-sm text-gray-500">${(portfolio.total_staked * 1.85).toLocaleString()} USD</p>
               </div>
 
@@ -735,7 +735,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                   <Award className="text-purple-600" size={24} />
                   <span className="text-sm font-medium text-gray-600">Rewards Earned</span>
                 </div>
-                <p className="text-2xl font-bold text-purple-700">{portfolio.total_rewards_earned.toLocaleString()} $GUI</p>
+                <p className="text-2xl font-bold text-purple-700">{portfolio.total_rewards_earned.toLocaleString()} $OCT</p>
                 <p className="text-sm text-gray-500">+${(portfolio.total_rewards_earned * 1.85).toFixed(2)} USD</p>
               </div>
 
@@ -787,7 +787,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-emerald-700">350 $GUI</p>
+                              <p className="font-bold text-emerald-700">350 $OCT</p>
                               <p className="text-sm text-gray-600">{field.investment_pool.apy_estimate}% APY</p>
                             </div>
                           </div>
@@ -802,21 +802,21 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                             <p className="font-medium">Staked in Wheat F1</p>
                             <p className="text-sm text-gray-600">2 days ago</p>
                           </div>
-                          <p className="font-bold text-blue-700">+500 $GUI</p>
+                          <p className="font-bold text-blue-700">+500 $OCT</p>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                           <div>
                             <p className="font-medium">Rewards Claimed</p>
                             <p className="text-sm text-gray-600">5 days ago</p>
                           </div>
-                          <p className="font-bold text-green-700">+23.4 $GUI</p>
+                          <p className="font-bold text-green-700">+23.4 $OCT</p>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                           <div>
                             <p className="font-medium">Staked in Rice F2</p>
                             <p className="text-sm text-gray-600">1 week ago</p>
                           </div>
-                          <p className="font-bold text-purple-700">+300 $GUI</p>
+                          <p className="font-bold text-purple-700">+300 $OCT</p>
                         </div>
                       </div>
                     </div>
@@ -835,12 +835,12 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                             <span className="text-3xl">{getCropEmoji(field.crop_name)}</span>
                             <div>
                               <h3 className="font-bold text-lg">{field.crop_name} - Field {field.field_id}</h3>
-                              <p className="text-gray-600">Staked: 350 $GUI | APY: {field.investment_pool.apy_estimate}%</p>
+                              <p className="text-gray-600">Staked: 350 $OCT | APY: {field.investment_pool.apy_estimate}%</p>
                             </div>
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-gray-600">Expected Returns</p>
-                            <p className="font-bold text-green-600">+{(350 * field.investment_pool.apy_estimate / 100).toFixed(1)} $GUI</p>
+                            <p className="font-bold text-green-600">+{(350 * field.investment_pool.apy_estimate / 100).toFixed(1)} $OCT</p>
                           </div>
                         </div>
                         <div className="grid grid-cols-3 gap-4 text-sm">
@@ -879,7 +879,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                         <p className="text-emerald-600">Available to claim now</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-emerald-700">45.7 $GUI</p>
+                        <p className="text-2xl font-bold text-emerald-700">45.7 $OCT</p>
                         <button className="mt-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors">
                           Claim Rewards
                         </button>
@@ -901,7 +901,7 @@ function PortfolioPage({ portfolio, onBack, farmData, walletConnected }: {
                           <p className="text-sm text-gray-600">{formatDate(reward.date)}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-green-600">+{reward.amount} $GUI</p>
+                          <p className="font-bold text-green-600">+{reward.amount} $OCT</p>
                           <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
                             {reward.status}
                           </span>
@@ -954,7 +954,7 @@ function StakingPage({ onBack, farmData, walletConnected, userBalance }: {
         </button>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-emerald-900 mb-2">Stake $GUI Tokens</h1>
+          <h1 className="text-3xl font-bold text-emerald-900 mb-2">Stake $OCT Tokens</h1>
           <p className="text-gray-600">Choose from available farming pools to earn yields</p>
         </div>
 
@@ -962,7 +962,7 @@ function StakingPage({ onBack, farmData, walletConnected, userBalance }: {
           <div className="bg-white/80 rounded-xl p-12 shadow-xl text-center">
             <Wallet size={64} className="mx-auto text-gray-400 mb-4" />
             <h2 className="text-2xl font-bold text-gray-700 mb-2">Connect Your Wallet</h2>
-            <p className="text-gray-500 mb-6">Connect your wallet to start staking $GUI tokens</p>
+            <p className="text-gray-500 mb-6">Connect your wallet to start staking $OCT tokens</p>
             <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg transition-colors">
               Connect Wallet
             </button>
@@ -972,8 +972,8 @@ function StakingPage({ onBack, farmData, walletConnected, userBalance }: {
             {/* User Balance & Filters */}
             <div className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="bg-white/80 rounded-lg px-4 py-3 shadow">
-                <p className="text-sm text-gray-600">Your $GUI Balance</p>
-                <p className="text-xl font-bold text-emerald-700">{userBalance.toLocaleString()} $GUI</p>
+                <p className="text-sm text-gray-600">Your $OCT Balance</p>
+                <p className="text-xl font-bold text-emerald-700">{userBalance.toLocaleString()} $OCT</p>
               </div>
               
               <div className="flex items-center gap-2">
@@ -1064,7 +1064,7 @@ function StakingPoolCard({ field, onSelect, isSelected }: {
       <div className="space-y-2 mb-4">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Total Staked:</span>
-          <span className="font-medium">{field.investment_pool.total_staked.toLocaleString()} $GUI</span>
+          <span className="font-medium">{field.investment_pool.total_staked.toLocaleString()} $OCT</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Investors:</span>
@@ -1105,7 +1105,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
     // Simulate staking transaction
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsStaking(false);
-    alert(`Successfully staked ${stakeAmount} $GUI tokens in ${field.crop_name} farm!`);
+    alert(`Successfully staked ${stakeAmount} $OCT tokens in ${field.crop_name} farm!`);
   };
 
   const expectedReturns = (stakeAmount * field.investment_pool.apy_estimate / 100).toFixed(2);
@@ -1116,7 +1116,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
       {/* Stake Input */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Stake Amount ($GUI)
+          Stake Amount ($OCT)
         </label>
         <div className="relative mb-4">
           <input
@@ -1126,7 +1126,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
             min={field.investment_pool.min_stake}
             max={userBalance}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-            placeholder={`Min: ${field.investment_pool.min_stake} $GUI`}
+            placeholder={`Min: ${field.investment_pool.min_stake} $OCT`}
           />
           <button
             onClick={() => setStakeAmount(userBalance)}
@@ -1149,7 +1149,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
         </div>
 
         <p className="text-sm text-gray-500 mb-6">
-          Your Balance: {userBalance.toLocaleString()} $GUI
+          Your Balance: {userBalance.toLocaleString()} $OCT
         </p>
 
         <button
@@ -1165,7 +1165,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
           ) : (
             <>
               <DollarSign size={20} />
-              Stake {stakeAmount.toLocaleString()} $GUI
+              Stake {stakeAmount.toLocaleString()} $OCT
             </>
           )}
         </button>
@@ -1179,7 +1179,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Stake Amount:</span>
-                <span className="font-bold">{stakeAmount.toLocaleString()} $GUI</span>
+                <span className="font-bold">{stakeAmount.toLocaleString()} $OCT</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">APY:</span>
@@ -1187,7 +1187,7 @@ function StakingInterface({ field, userBalance }: { field: Field; userBalance: n
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Expected Annual Returns:</span>
-                <span className="font-bold text-green-600">{expectedReturns} $GUI</span>
+                <span className="font-bold text-green-600">{expectedReturns} $OCT</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Lock Period:</span>
@@ -1417,7 +1417,7 @@ function getEnhancedFallbackResponse(message: string, farmData: FarmData | null)
   
   // Token and liquidity queries
   if (lowerMessage.includes('gui') || lowerMessage.includes('token') || lowerMessage.includes('withdraw')) {
-    return "$GUI tokens are locked until harvest completion to ensure farm funding stability. Early withdrawal penalties apply, but you earn rewards proportional to actual crop yields. Rewards are claimable weekly, and all transactions are recorded on-chain for transparency.";
+    return "$OCT tokens are locked until harvest completion to ensure farm funding stability. Early withdrawal penalties apply, but you earn rewards proportional to actual crop yields. Rewards are claimable weekly, and all transactions are recorded on-chain for transparency.";
   }
   
   // Continue with existing agricultural queries...
@@ -1446,7 +1446,7 @@ function getEnhancedFallbackResponse(message: string, farmData: FarmData | null)
   }
   
   // Default enhanced response
-  return "I can help you with investment strategies, yield analysis, risk assessment, and portfolio optimization for your $GUI farming investments. Ask me about specific crops, APY comparisons, or the best staking strategies for your goals!";
+  return "I can help you with investment strategies, yield analysis, risk assessment, and portfolio optimization for your $OCT farming investments. Ask me about specific crops, APY comparisons, or the best staking strategies for your goals!";
 }
 
 // ---- Helper Components and Functions ----

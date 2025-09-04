@@ -61,8 +61,8 @@ export function useInvestment() {
                 success: true,
                 transactionDigest: result.digest,
                 timestamp: Date.now(),
-                gasUsed: result.effects?.gasUsed?.computationCost ? 
-                  (Number(result.effects.gasUsed.computationCost) / 1e9).toFixed(4) : '0.001',
+                gasUsed: (result as any).effects?.gasUsed?.computationCost ? 
+                  (Number((result as any).effects.gasUsed.computationCost) / 1e9).toFixed(4) : '0.001',
               })
             },
             onError: (error) => {

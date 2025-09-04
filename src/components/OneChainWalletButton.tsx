@@ -71,8 +71,8 @@ export function OneChainWalletButton() {
 
   useEffect(() => {
     // Check wallet type
-    if (currentWallet) {
-      const walletName = currentWallet.name?.toLowerCase()
+    if (currentWallet && 'name' in currentWallet) {
+      const walletName = (currentWallet as any).name?.toLowerCase()
       // Slush wallet is OneChain compatible
       const isOneChainWallet = walletName?.includes('slush') || 
                                walletName?.includes('onechain') || 
@@ -99,13 +99,20 @@ export function OneChainWalletButton() {
     }
   }, [disconnect])
 
-  return (
-    <div className="flex items-center gap-2">
+  // If no account, just show connect button
+  if (!currentAccount) {
+    return (
       <ConnectButton 
         className="!bg-gradient-to-r !from-blue-600 !to-purple-600 !text-white !px-4 !py-2 !rounded-lg !font-medium !transition-all hover:!from-blue-700 hover:!to-purple-700"
         connectText="Connect Wallet"
       />
-      {currentAccount && (
+    )
+  }
+
+  // If connected, show full wallet info
+  return (
+    <div className="flex items-center gap-2">
+      {(
         <div className="flex items-center gap-3 bg-white/10 dark:bg-gray-800/50 px-3 py-2 rounded-lg">
           <div className="flex items-center gap-2">
             <User className="w-4 h-4 text-gray-300" />
@@ -117,7 +124,7 @@ export function OneChainWalletButton() {
             <div className="flex items-center gap-1 text-sm">
               <span className="text-gray-400">Balance:</span>
               <span className="font-bold text-white">
-                {balance} {isOneChain ? ONECHAIN_CONFIG.tokens.native.symbol : 'SUI'}
+                {balance} OCT
               </span>
             </div>
             <button

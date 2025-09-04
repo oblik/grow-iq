@@ -1,6 +1,6 @@
 'use client'
 
-import { OneChainWalletButton } from './OneChainWalletButton'
+import { WalletConnectButton } from './WalletConnectButton'
 import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
@@ -15,7 +15,7 @@ export function Header() {
           
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <OneChainWalletButton />
+            <WalletConnectButton />
           </div>
         </div>
       </div>

@@ -36,7 +36,7 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
   const currentAccount = useCurrentAccount()
   const { makeInvestment, isWalletConnected } = useInvestment()
   
-  // Set minimum to 10 GUI for testnet (0.01 SUI)
+  // Set minimum to 10 OCT for testnet
   const [amount, setAmount] = useState(Math.min(field?.investment_pool?.min_stake || 10, 10))
   const [isProcessing, setIsProcessing] = useState(false)
   const [txResult, setTxResult] = useState<any>(null)
@@ -60,7 +60,7 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
     }
 
     if (amount < field.investment_pool.min_stake || amount > field.investment_pool.max_stake) {
-      setError(`Investment must be between ${field.investment_pool.min_stake} and ${field.investment_pool.max_stake} GUI`)
+      setError(`Investment must be between ${field.investment_pool.min_stake} and ${field.investment_pool.max_stake} OCT`)
       return
     }
 
@@ -184,9 +184,9 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
               {/* Investment Amount Input */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Investment Amount (GUI)
+                  Investment Amount (OCT)
                   <span className="text-xs text-gray-500 ml-2">
-                    (Min: 10 GUI = 0.01 SUI)
+                    (Min: 10 OCT)
                   </span>
                 </label>
                 <div className="relative">
@@ -202,12 +202,12 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
                     placeholder={`Min: ${field.investment_pool.min_stake}`}
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-                    GUI
+                    OCT
                   </div>
                 </div>
                 <div className="flex justify-between mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  <span>Min: {field.investment_pool.min_stake} GUI</span>
-                  <span>Max: {field.investment_pool.max_stake} GUI</span>
+                  <span>Min: {field.investment_pool.min_stake} OCT</span>
+                  <span>Max: {field.investment_pool.max_stake} OCT</span>
                 </div>
               </div>
 
@@ -227,7 +227,7 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
                              hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors
                              disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                   >
-                    {val} GUI
+                    {val} OCT
                   </button>
                 ))}
               </div>
@@ -242,14 +242,14 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Investment:</span>
-                    <span className="font-medium">{amount.toLocaleString()} GUI</span>
+                    <span className="font-medium">{amount.toLocaleString()} OCT</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">
                       Est. Returns ({daysToHarvest} days):
                     </span>
                     <span className="font-medium text-green-600">
-                      +{estimatedReturns.toLocaleString()} GUI
+                      +{estimatedReturns.toLocaleString()} OCT
                     </span>
                   </div>
                   <div className="border-t border-gray-300 dark:border-gray-600 pt-2">

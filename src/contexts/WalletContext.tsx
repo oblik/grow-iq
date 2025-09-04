@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { useCurrentAccount, useCurrentWallet, useSuiClientQuery, useDisconnectWallet, useSuiClient } from '@mysten/dapp-kit'
+import { useCurrentAccount, useCurrentWallet, useSuiClientQuery, useDisconnectWallet, useSuiClient, useConnectWallet, useWallets } from '@mysten/dapp-kit'
 import { formatAddress } from '@mysten/sui/utils'
 
 interface WalletContextType {
@@ -20,6 +20,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const currentAccount = useCurrentAccount()
   const currentWallet = useCurrentWallet()
   const client = useSuiClient()
+  const wallets = useWallets()
+  const { mutate: connectWallet } = useConnectWallet()
   const { mutate: disconnectWallet } = useDisconnectWallet()
   const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
@@ -101,7 +103,13 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   }, [currentAccount?.address, client])
 
   const connect = () => {
-    // Wallet connection is handled by the dapp-kit ConnectButton
+    if (wallets.length === 0) {
+      alert('No wallet detected! Please install Sui Wallet, Suiet, or Slush wallet extension.')
+      return
+    }
+    
+    // Connect to the first available wallet (Slush in your case)
+    connectWallet({ wallet: wallets[0] })
   }
 
   const disconnect = () => {
