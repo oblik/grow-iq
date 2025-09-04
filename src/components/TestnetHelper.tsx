@@ -2,13 +2,17 @@
 
 import { useState } from 'react'
 import { X, Droplets, Info, ExternalLink, Copy, CheckCircle } from 'lucide-react'
-import { useCurrentAccount } from '@mysten/dapp-kit'
+import { useCurrentAccount, useCurrentWallet } from '@mysten/dapp-kit'
 import { formatAddress } from '@mysten/sui/utils'
+import { ONECHAIN_CONFIG } from '@/config/onechain'
 
 export function TestnetHelper() {
   const [showHelper, setShowHelper] = useState(false)
   const [copied, setCopied] = useState(false)
   const currentAccount = useCurrentAccount()
+  const currentWallet = useCurrentWallet()
+  
+  const isOneChain = true // Always OneChain
 
   const copyAddress = () => {
     if (currentAccount?.address) {
@@ -45,7 +49,7 @@ export function TestnetHelper() {
                     Get Free Testnet Tokens
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    You need testnet tokens to make transactions (100% FREE)
+                    You need OneChain (OCT) testnet tokens to make transactions (100% FREE)
                   </p>
                 </div>
                 <button
@@ -83,12 +87,12 @@ export function TestnetHelper() {
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                     <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                       <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
-                      Web Faucet (Easiest)
+                      OneChain Web Faucet (Easiest)
                     </h3>
                     <ol className="space-y-2 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="text-gray-500">1.</span>
-                        <span>Visit the Sui Testnet Faucet</span>
+                        <span>Visit the Sui Testnet Faucet (works with OneChain)</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-gray-500">2.</span>
@@ -100,7 +104,7 @@ export function TestnetHelper() {
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-gray-500">4.</span>
-                        <span>You'll receive 1 SUI (can request every hour)</span>
+                        <span>You'll receive test tokens (can request every hour)</span>
                       </li>
                     </ol>
                     <a
@@ -109,7 +113,7 @@ export function TestnetHelper() {
                       rel="noopener noreferrer"
                       className="mt-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
                     >
-                      Open Sui Faucet
+                      Open Testnet Faucet
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </div>
@@ -157,7 +161,7 @@ export function TestnetHelper() {
                         <p className="font-medium text-green-900 dark:text-green-300">Tips:</p>
                         <ul className="space-y-1 text-green-800 dark:text-green-400">
                           <li>• Testnet tokens are 100% FREE - never pay for them</li>
-                          <li>• Keep at least 0.1 SUI for gas fees</li>
+                          <li>• Keep at least 0.1 OCT for gas fees</li>
                           <li>• Transactions on testnet don't affect real money</li>
                           <li>• Perfect for testing without any risk</li>
                         </ul>

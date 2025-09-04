@@ -3,13 +3,13 @@ export const ONECHAIN_CONFIG = {
   // Network endpoints
   networks: {
     mainnet: {
-      rpc: 'https://rpc.onechain.network',
-      explorer: 'https://explorer.onechain.network',
+      rpc: 'https://rpc-mainnet.onelabs.cc:443',
+      explorer: 'https://explorer.onelabs.cc',
       chainId: 'onechain:mainnet',
     },
     testnet: {
-      rpc: 'https://rpc-testnet.onechain.network',
-      explorer: 'https://explorer-testnet.onechain.network',
+      rpc: 'https://rpc-testnet.onelabs.cc:443',
+      explorer: 'https://explorer.onelabs.cc',
       chainId: 'onechain:testnet',
     },
     // Fallback to Sui testnet for development
@@ -65,14 +65,10 @@ export const ONECHAIN_CONFIG = {
 
 // Helper function to get current network
 export function getCurrentNetwork(): 'mainnet' | 'testnet' | 'sui_testnet' {
-  if (typeof window === 'undefined') return 'sui_testnet';
+  if (typeof window === 'undefined') return 'testnet';
   
-  const storedNetwork = window.localStorage?.getItem('wallet_network');
-  if (storedNetwork === 'onechain') {
-    return process.env.NODE_ENV === 'production' ? 'mainnet' : 'testnet';
-  }
-  
-  return 'sui_testnet';
+  // Always use OneChain testnet
+  return 'testnet';
 }
 
 // Helper function to get RPC URL

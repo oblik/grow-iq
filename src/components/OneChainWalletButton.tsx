@@ -3,7 +3,8 @@
 import { ConnectButton, useCurrentAccount, useSuiClientQuery, useDisconnectWallet, useCurrentWallet, useSuiClient } from '@mysten/dapp-kit'
 import { formatAddress } from '@mysten/sui/utils'
 import { Wallet, LogOut, User, RefreshCw } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { ONECHAIN_CONFIG } from '@/config/onechain'
 
 export function OneChainWalletButton() {
   const currentAccount = useCurrentAccount()
@@ -69,27 +70,40 @@ export function OneChainWalletButton() {
   }
 
   useEffect(() => {
-    // Detect if OneChain wallet is being used
+    // Check wallet type
     if (currentWallet) {
       const walletName = currentWallet.name?.toLowerCase()
-      // Check if it's OneChain wallet or if user has OneChain extension
-      const isOneChainWallet = walletName?.includes('onechain') || 
-                               walletName?.includes('one chain') ||
-                               window.localStorage?.getItem('preferred_wallet') === 'onechain'
+      // Slush wallet is OneChain compatible
+      const isOneChainWallet = walletName?.includes('slush') || 
+                               walletName?.includes('onechain') || 
+                               walletName?.includes('one chain')
       setIsOneChain(isOneChainWallet)
       
-      // Store network preference
-      if (isOneChainWallet) {
-        window.localStorage?.setItem('wallet_network', 'onechain')
+      if (typeof window !== 'undefined') {
+        window.localStorage?.setItem('wallet_network', isOneChainWallet ? 'onechain' : 'sui')
       }
     }
   }, [currentWallet])
 
+  // Handle disconnect with proper cleanup
+  const handleDisconnect = useCallback(() => {
+    try {
+      disconnect()
+      // Clear any cached state
+      setBalance('0')
+      if (typeof window !== 'undefined') {
+        window.localStorage?.removeItem('wallet_network')
+      }
+    } catch (error) {
+      console.error('Error disconnecting wallet:', error)
+    }
+  }, [disconnect])
+
   return (
     <div className="flex items-center gap-2">
       <ConnectButton 
+        className="!bg-gradient-to-r !from-blue-600 !to-purple-600 !text-white !px-4 !py-2 !rounded-lg !font-medium !transition-all hover:!from-blue-700 hover:!to-purple-700"
         connectText="Connect Wallet"
-        className="!bg-gradient-to-r !from-blue-600 !to-purple-600 !text-white !px-4 !py-2 !rounded-lg !font-medium !transition-all hover:!from-blue-700 hover:!to-purple-700 !border-0"
       />
       {currentAccount && (
         <div className="flex items-center gap-3 bg-white/10 dark:bg-gray-800/50 px-3 py-2 rounded-lg">
@@ -102,7 +116,9 @@ export function OneChainWalletButton() {
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 text-sm">
               <span className="text-gray-400">Balance:</span>
-              <span className="font-bold text-white">{balance} SUI</span>
+              <span className="font-bold text-white">
+                {balance} {isOneChain ? ONECHAIN_CONFIG.tokens.native.symbol : 'SUI'}
+              </span>
             </div>
             <button
               onClick={handleRefresh}
@@ -117,7 +133,7 @@ export function OneChainWalletButton() {
             <span className="text-xs bg-purple-600/30 text-purple-300 px-2 py-0.5 rounded">OneChain</span>
           )}
           <button
-            onClick={() => disconnect()}
+            onClick={handleDisconnect}
             className="p-1 hover:bg-white/10 rounded transition-colors"
             title="Disconnect"
           >

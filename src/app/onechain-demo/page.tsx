@@ -3,7 +3,7 @@
 import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit'
 import { Transaction } from '@mysten/sui/transactions'
 import { useState } from 'react'
-import { useOneChainAuth } from '@/hooks/useOneChainAuth'
+// import { useOneChainAuth } from '@/hooks/useOneChainAuth' // Removed - not needed
 import { OneChainWalletButton } from '@/components/OneChainWalletButton'
 import { Header } from '@/components/Header'
 
@@ -11,7 +11,7 @@ export default function OneChainDemoPage() {
   const currentAccount = useCurrentAccount()
   const client = useSuiClient()
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction()
-  const { isAuthenticated, authenticate, session } = useOneChainAuth()
+  // const { isAuthenticated, authenticate, session } = useOneChainAuth() // Not needed
   const [txResult, setTxResult] = useState<any>(null)
   const [loading, setLoading] = useState(false)
 

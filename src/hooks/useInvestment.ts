@@ -1,8 +1,10 @@
 'use client'
 
 import { useCurrentAccount, useSuiClient, useSignAndExecuteTransaction, useCurrentWallet } from '@mysten/dapp-kit'
-import { createInvestmentHandler, createInvestmentTransaction, InvestmentRequest, InvestmentResult } from '@/lib/investment-transactions'
+import { createInvestmentHandler, InvestmentRequest, InvestmentResult } from '@/lib/investment-transactions'
 import { Transaction } from '@mysten/sui/transactions'
+import { onechainTxBuilder } from '@/lib/onechain-transactions'
+import { ONECHAIN_CONFIG } from '@/config/onechain'
 
 export function useInvestment() {
   const currentAccount = useCurrentAccount()
@@ -21,36 +23,32 @@ export function useInvestment() {
 
     return new Promise((resolve) => {
       try {
-        // Check if we have OneChain wallet
-        const isOneChain = currentWallet?.name?.toLowerCase().includes('onechain') || 
-                          window.localStorage?.getItem('wallet_network') === 'onechain'
+        // Use OneChain
+        const isOneChain = true;
         
-        // Create a REAL transaction for testnet
+        // Create transaction for OneChain
         const tx = new Transaction()
         
-        // Convert GUI amount to SUI for transaction
-        // Using conversion rate: 1000 GUI = 1 SUI for demo
-        const suiAmount = request.amount / 1000;
+        // Convert GUI amount to OCT
+        const tokenAmount = request.amount / 1000; // 1000 GUI = 1 OCT
         
-        // Convert to MIST (smallest unit)
-        const amountInMist = Math.floor(suiAmount * 1e9)
+        // Convert to smallest unit (MIST for SUI, or OneChain equivalent)
+        const amountInMist = Math.floor(tokenAmount * 1e9)
         
         
         if (amountInMist > 0) {
-          // For testnet demo: Create a simple transfer
-          // This demonstrates real transaction flow
+          // For OneChain: Create a simple transfer
           const [coin] = tx.splitCoins(tx.gas, [amountInMist])
           
-          // Transfer to a burn address for demo (real contract would handle this)
-          // Using a known test address that accepts transfers
+          // Transfer to a demo address for testing
           tx.transferObjects(
             [coin],
             '0x7b8e0864967427679b4e129f79dc332a885c6087ec9e187b53451a9006ee15f2' // Testnet demo address
           )
         }
         
-        // Set reasonable gas budget for testnet
-        tx.setGasBudget(10000000) // 0.01 SUI for gas
+        // Set reasonable gas budget for OneChain testnet
+        tx.setGasBudget(10000000) // 0.01 OCT for gas
         
         // EXECUTE REAL TRANSACTION ON TESTNET
         signAndExecute(
@@ -71,7 +69,7 @@ export function useInvestment() {
               console.error('Transaction failed:', error)
               resolve({
                 success: false,
-                error: `Transaction failed: ${error.message || 'Unknown error'}. Make sure you have testnet tokens!`,
+                error: `Transaction failed: ${error.message || 'Unknown error'}. Make sure you have OneChain (OCT) testnet tokens!`,
               })
             },
           }

@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "onechain:transfer": "npx tsx scripts/onechain-transfer.ts"
   },
   "dependencies": {
+    "@mysten/bcs": "^1.6.0",
     "@mysten/dapp-kit": "^0.17.7",
     "@mysten/sui": "^1.37.6",
     "@mysten/wallet-standard": "^0.16.14",
