@@ -36,13 +36,16 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
   const currentAccount = useCurrentAccount()
   const { makeInvestment, isWalletConnected } = useInvestment()
   
-  const [amount, setAmount] = useState(field.investment_pool.min_stake)
+  // Set minimum to 10 GUI for testnet (0.01 SUI)
+  const [amount, setAmount] = useState(Math.min(field?.investment_pool?.min_stake || 10, 10))
   const [isProcessing, setIsProcessing] = useState(false)
   const [txResult, setTxResult] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const [step, setStep] = useState<'input' | 'confirm' | 'processing' | 'success'>('input')
 
-  if (!isOpen) return null
+  if (!isOpen || !field) {
+    return null;
+  }
 
   const daysToHarvest = Math.ceil(
     (new Date(field.expected_harvest_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
@@ -108,7 +111,7 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
       <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6">
@@ -181,7 +184,10 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
               {/* Investment Amount Input */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Investment Amount (GUI/OCT)
+                  Investment Amount (GUI)
+                  <span className="text-xs text-gray-500 ml-2">
+                    (Min: 10 GUI = 0.01 SUI)
+                  </span>
                 </label>
                 <div className="relative">
                   <input
@@ -208,10 +214,10 @@ export function InvestmentModal({ field, isOpen, onClose, onSuccess }: Investmen
               {/* Quick Amount Buttons */}
               <div className="grid grid-cols-4 gap-2 mb-6">
                 {[
-                  field.investment_pool.min_stake,
-                  100,
-                  500,
-                  1000
+                  10,  // 0.01 SUI
+                  50,  // 0.05 SUI
+                  100, // 0.1 SUI
+                  500  // 0.5 SUI
                 ].map((val) => (
                   <button
                     key={val}

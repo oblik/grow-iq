@@ -3,14 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, Send, Bot, User, Loader2, Wallet, TrendingUp, DollarSign, Users, Target, Award, Eye, Zap, Sparkles } from "lucide-react";
 import { useWallet } from '@/contexts/WalletContext';
 import FarmVerse3D from './FarmVerse3D';
-import ParticleField from './ParticleField';
-import NeuralVisualizer from './NeuralVisualizer';
-import MatrixRain from './MatrixRain';
-import HolographicUI from './HolographicUI';
-import FloatingActionHub from './FloatingActionHub';
-import SpectacularLoader from './SpectacularLoader';
 import FieldDetailPage from './FieldDetailPage';
 import VideoPlayer from './VideoPlayer';
+import { InvestmentModal } from './InvestmentModal';
+import { TestnetHelper } from './TestnetHelper';
+import { TestnetBanner } from './TestnetBanner';
 
 // ---- Type Definitions ----
 type Field = {
@@ -78,15 +75,52 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewState, setViewState] = useState<ViewState>({ page: 'dashboard' });
-  const { isConnected: walletConnected, connect, disconnect } = useWallet();
-  const [showLoader, setShowLoader] = useState(true);
+  const { isConnected: walletConnected, connect, disconnect, currentWallet, balance, address } = useWallet();
+  const [walletType, setWalletType] = useState<'onechain' | 'sui' | null>(null);
   const [userPortfolio, setUserPortfolio] = useState<UserPortfolio>({
-    total_gui_balance: 2500,
-    total_staked: 1800,
-    total_rewards_earned: 234.56,
-    active_investments: 5,
-    portfolio_value_usd: 4672.33
+    total_gui_balance: 0,
+    total_staked: 0,
+    total_rewards_earned: 0,
+    active_investments: 0,
+    portfolio_value_usd: 0
   });
+  
+  // Detect wallet type and update balance
+  useEffect(() => {
+    if (currentWallet) {
+      const walletName = currentWallet.name?.toLowerCase();
+      if (walletName?.includes('onechain') || walletName?.includes('one chain')) {
+        setWalletType('onechain');
+      } else {
+        setWalletType('sui');
+      }
+    } else {
+      setWalletType(null);
+    }
+  }, [currentWallet]);
+  
+  // Update portfolio balance when wallet balance changes
+  useEffect(() => {
+    if (balance && walletConnected) {
+      const balanceNum = parseFloat(balance) || 0;
+      // Convert SUI balance to GUI tokens (using 1000 as conversion rate for demo)
+      const guiBalance = balanceNum * 1000;
+      
+      setUserPortfolio(prev => ({
+        ...prev,
+        total_gui_balance: guiBalance,
+        portfolio_value_usd: guiBalance * 1.85
+      }));
+      
+      console.log('Wallet balance updated:', {
+        suiBalance: balanceNum,
+        guiBalance: guiBalance,
+        address: address
+      });
+    }
+  }, [balance, walletConnected, address]);
+  const [showInvestmentModal, setShowInvestmentModal] = useState(false);
+  const [selectedInvestmentField, setSelectedInvestmentField] = useState<Field | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,6 +150,17 @@ export default function Page() {
 
   const navigateToField = (field: Field) => {
     setViewState({ page: 'field-detail', selectedField: field });
+  };
+
+  const handleInvestmentClick = (field: Field) => {
+    setSelectedInvestmentField(field);
+    setShowInvestmentModal(true);
+  };
+
+  const handleInvestmentSuccess = () => {
+    setShowInvestmentModal(false);
+    // Could refresh data here if needed
+    // For now, just close the modal
   };
 
   const navigateToPage = (page: 'dashboard' | 'portfolio' | 'staking') => {
@@ -192,36 +237,14 @@ export default function Page() {
     );
   }
 
-  // Show spectacular loader first
-  if (showLoader) {
-    return (
-      <SpectacularLoader 
-        onComplete={() => setShowLoader(false)}
-        duration={3500}
-      />
-    );
-  }
 
   // Render main dashboard
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-blue-100 py-8 relative overflow-hidden">
-      {/* Particle Background */}
-      <div className="absolute inset-0 opacity-20">
-        <ParticleField
-          particleCount={30}
-          effects={['glow', 'magnetic']}
-          colors={['#10b981', '#22c55e', '#f59e0b', '#8b5cf6']}
-        />
-      </div>
-
-      {/* Matrix Rain Effect */}
-      <div className="absolute inset-0 opacity-10">
-        <MatrixRain
-          characters={['0', '1', '$', 'Ξ', '⚡', '🌱', '📈', '💎', 'GUI']}
-          color="#10b981"
-          speed={0.5}
-        />
-      </div>
+    <>
+      {/* Testnet Banner */}
+      <TestnetBanner />
+      
+      <div className="min-h-screen bg-gradient-to-br from-green-100 via-emerald-100 to-blue-100 pt-16 pb-8 relative overflow-hidden">
       {/* Enhanced Header with DeFi Stats */}
       <header className="mx-auto max-w-7xl mb-8 px-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
@@ -264,9 +287,21 @@ export default function Page() {
             {walletConnected ? (
               <div className="flex items-center gap-2">
                 <div className="bg-white/90 rounded-lg px-4 py-2 shadow-lg border border-gray-200">
-                  <p className="text-sm text-gray-700 font-medium">$GUI Balance</p>
-                  <p className="font-bold text-emerald-800 text-lg">{userPortfolio.total_gui_balance.toLocaleString()}</p>
+                  <p className="text-sm text-gray-700 font-medium">
+                    Balance
+                  </p>
+                  <p className="font-bold text-emerald-800 text-lg">
+                    {balance ? `${balance} SUI` : '0 SUI'}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    ≈ {userPortfolio.total_gui_balance.toFixed(0)} GUI
+                  </p>
                 </div>
+                {walletType === 'onechain' && (
+                  <div className="bg-purple-600/20 rounded-lg px-3 py-1 shadow-lg border border-purple-400">
+                    <p className="text-xs text-purple-800 font-bold">OneChain Network</p>
+                  </div>
+                )}
                 <button
                   onClick={disconnectWallet}
                   className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors shadow-lg border border-red-400"
@@ -277,60 +312,56 @@ export default function Page() {
             ) : (
               <button
                 onClick={connectWallet}
-                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-lg border border-emerald-500"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-purple-600 text-white font-semibold rounded-lg hover:from-emerald-700 hover:to-purple-700 transition-colors shadow-lg border border-emerald-500"
               >
                 <Wallet size={20} />
-                Connect Wallet
+                Connect Wallet (OneChain/Sui)
               </button>
             )}
           </div>
         </div>
 
-        {/* Holographic DeFi Stats */}
+        {/* Simple DeFi Stats */}
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <HolographicUI
-            title="Total Staked"
-            value={`${farmData?.fields.reduce((sum, f) => sum + f.investment_pool.total_staked, 0).toLocaleString()} $GUI`}
-            subtitle="Total Value Locked"
-            icon={<DollarSign size={16} />}
-            gradient={['#10b981', '#22c55e']}
-            animated={true}
-            glowEffect={true}
-            dataStream={farmData?.fields.map(f => f.investment_pool.total_staked / 50000) || []}
-          />
+          <div className="bg-white/80 rounded-lg p-4 shadow-md">
+            <div className="flex items-center gap-2 mb-2">
+              <DollarSign size={20} className="text-emerald-600" />
+              <h3 className="font-semibold text-gray-700">Total Staked</h3>
+            </div>
+            <p className="text-2xl font-bold text-emerald-800">
+              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.total_staked, 0).toLocaleString()} $GUI
+            </p>
+          </div>
           
-          <HolographicUI
-            title="Avg APY"
-            value={`${farmData?.fields ? (farmData.fields.reduce((sum, f) => sum + f.investment_pool.apy_estimate, 0) / farmData.fields.length).toFixed(1) : 0}%`}
-            subtitle="Annual Percentage Yield"
-            icon={<TrendingUp size={16} />}
-            gradient={['#3b82f6', '#60a5fa']}
-            animated={true}
-            glowEffect={true}
-            dataStream={farmData?.fields.map(f => f.investment_pool.apy_estimate / 20) || []}
-          />
+          <div className="bg-white/80 rounded-lg p-4 shadow-md">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp size={20} className="text-blue-600" />
+              <h3 className="font-semibold text-gray-700">Avg APY</h3>
+            </div>
+            <p className="text-2xl font-bold text-blue-800">
+              {farmData?.fields ? (farmData.fields.reduce((sum, f) => sum + f.investment_pool.apy_estimate, 0) / farmData.fields.length).toFixed(1) : 0}%
+            </p>
+          </div>
           
-          <HolographicUI
-            title="Active Investors"
-            value={farmData?.fields.reduce((sum, f) => sum + f.investment_pool.investors_count, 0) || 0}
-            subtitle="Community Members"
-            icon={<Users size={16} />}
-            gradient={['#8b5cf6', '#a78bfa']}
-            animated={true}
-            glowEffect={true}
-            dataStream={farmData?.fields.map(f => f.investment_pool.investors_count / 50) || []}
-          />
+          <div className="bg-white/80 rounded-lg p-4 shadow-md">
+            <div className="flex items-center gap-2 mb-2">
+              <Users size={20} className="text-purple-600" />
+              <h3 className="font-semibold text-gray-700">Investors</h3>
+            </div>
+            <p className="text-2xl font-bold text-purple-800">
+              {farmData?.fields.reduce((sum, f) => sum + f.investment_pool.investors_count, 0) || 0}
+            </p>
+          </div>
           
-          <HolographicUI
-            title="Active Pools"
-            value={farmData?.fields.length || 0}
-            subtitle="Investment Options"
-            icon={<Target size={16} />}
-            gradient={['#f59e0b', '#fbbf24']}
-            animated={true}
-            glowEffect={true}
-            dataStream={farmData?.fields.map(f => f.growth_progress_percent / 100) || []}
-          />
+          <div className="bg-white/80 rounded-lg p-4 shadow-md">
+            <div className="flex items-center gap-2 mb-2">
+              <Target size={20} className="text-orange-600" />
+              <h3 className="font-semibold text-gray-700">Active Pools</h3>
+            </div>
+            <p className="text-2xl font-bold text-orange-800">
+              {farmData?.fields.length || 0}
+            </p>
+          </div>
         </div>
       </header>
 
@@ -393,45 +424,11 @@ export default function Page() {
         </div>
       </section>
 
-      {/* AI Neural Network Visualization */}
-      <section className="max-w-7xl mx-auto px-6 mb-8 relative z-10">
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-600/30 rounded-lg border border-purple-500/50">
-                <Zap className="text-purple-700" size={20} />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-purple-900">AI Yield Predictor</h2>
-                <p className="text-sm text-purple-700 font-medium">Neural Network Analysis</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 bg-purple-600/30 backdrop-blur-sm rounded-lg px-3 py-2 border border-purple-500/50">
-              <div className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold text-purple-800">Processing</span>
-            </div>
-          </div>
-          
-          <div className="h-64">
-            <NeuralVisualizer 
-              data={farmData?.fields.map(f => [
-                f.growth_progress_percent / 100,
-                f.soil_moisture_percent / 100,
-                f.temperature_celsius / 40,
-                f.ai_yield_prediction.confidence_score / 100
-              ])}
-              theme="neural"
-              speed={1.5}
-              intensity={1.2}
-            />
-          </div>
-        </div>
-      </section>
 
       {/* Enhanced Field Cards Grid */}
       <main className="max-w-7xl mx-auto px-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 relative z-10">
         {farmData?.fields?.map((field) => (
-          <EnhancedFieldCard key={field.field_id} field={field} onViewDetails={navigateToField} walletConnected={walletConnected} />
+          <EnhancedFieldCard key={field.field_id} field={field} onViewDetails={navigateToField} onInvestment={handleInvestmentClick} walletConnected={walletConnected} />
         )) || (
           <div className="col-span-full text-center text-gray-500">
             No investment pools available
@@ -441,46 +438,29 @@ export default function Page() {
 
       {/* AI Chatbot */}
       <AIChatbot farmData={farmData} />
+      
+      {/* Testnet Helper */}
+      <TestnetHelper />
 
-      {/* Floating Action Hub */}
-      <FloatingActionHub 
-        onAction={(action) => {
-          console.log(`🚀 Action triggered: ${action}`);
-          // Handle various actions
-          switch(action) {
-            case 'vr-mode':
-              // Toggle VR visualization mode
-              break;
-            case 'ai-insights':
-              // Show AI-powered insights modal
-              break;
-            case 'neural-view':
-              // Switch to neural network focused view
-              break;
-            case 'holographic':
-              // Enable holographic display mode
-              break;
-            case 'screenshot':
-              // Capture dashboard screenshot
-              break;
-            case 'sound-fx':
-              // Toggle sound effects
-              break;
-            case 'themes':
-              // Open theme selection
-              break;
-            case 'boost':
-              // Enable performance boost mode
-              break;
-          }
+      
+      {/* Investment Modal */}
+      <InvestmentModal
+        field={selectedInvestmentField || (farmData?.fields?.[0] as Field)}
+        isOpen={showInvestmentModal}
+        onClose={() => {
+          console.log('Closing investment modal');
+          setShowInvestmentModal(false);
+          setSelectedInvestmentField(null);
         }}
+        onSuccess={handleInvestmentSuccess}
       />
-    </div>
+      </div>
+    </>
   );
 }
 
 // ---- Enhanced Field Card Component with DeFi Features ----
-function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: Field; onViewDetails: (field: Field) => void; walletConnected: boolean }) {
+function EnhancedFieldCard({ field, onViewDetails, onInvestment, walletConnected }: { field: Field; onViewDetails: (field: Field) => void; onInvestment: (field: Field) => void; walletConnected: boolean }) {
   // Color helpers
   function waterColor(val: number) {
     return val < 40
@@ -512,20 +492,11 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
   const isAvailableSoon = field.status === 'available_soon';
 
   return (
-    <section className={`relative backdrop-blur-lg shadow-xl rounded-xl p-6 border transition-all duration-200 flex flex-col gap-4 overflow-hidden cursor-pointer group ${
+    <section className={`relative backdrop-blur-lg shadow-xl rounded-xl p-6 border transition-all duration-200 flex flex-col gap-4 overflow-hidden group ${
       isActive 
         ? 'bg-white/80 border-emerald-100 hover:scale-[1.02] hover:shadow-emerald-300' 
         : 'bg-gray-50/80 border-gray-200 hover:scale-[1.01] hover:shadow-gray-200'
     }`}>
-      {/* Particle effect overlay */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300">
-        <ParticleField
-          particleCount={8}
-          effects={['glow']}
-          colors={[field.investment_pool.risk_level === 'Low' ? '#22c55e' : field.investment_pool.risk_level === 'Medium' ? '#f59e0b' : '#ef4444']}
-          size={{ min: 1, max: 3 }}
-        />
-      </div>
       <div className="flex items-center gap-2">
         <span className="text-3xl">{getCropEmoji(field.crop_name)}</span>
         <div className="flex-1">
@@ -652,7 +623,11 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
       {/* Action Buttons */}
       <div className="flex gap-2 mt-2">
         <button
-          onClick={() => onViewDetails(field)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onViewDetails(field);
+          }}
           className={`flex-1 font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border ${
             isActive 
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500'
@@ -673,8 +648,13 @@ function EnhancedFieldCard({ field, onViewDetails, walletConnected }: { field: F
             </button>
           ) : (
             <button
-              onClick={() => onViewDetails(field)}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-blue-500"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onInvestment(field);
+              }}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg border border-blue-500 relative z-10"
             >
               <DollarSign size={16} />
               <span>Invest Now</span>

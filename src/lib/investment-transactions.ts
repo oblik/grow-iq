@@ -1,9 +1,9 @@
 import { Transaction } from '@mysten/sui/transactions';
 import { SuiClient } from '@mysten/sui/client';
+import { getRpcUrl, getExplorerUrl as getOneChainExplorerUrl, isOneChainWallet } from '@/config/onechain';
 
-// OneChain Configuration
-const ONECHAIN_TESTNET_RPC = 'https://rpc-testnet.onelabs.cc:443';
-const SUI_TESTNET_RPC = 'https://fullnode.testnet.sui.io:443'; // Fallback for testing
+// Legacy RPC endpoints (kept for backward compatibility)
+const SUI_TESTNET_RPC = 'https://fullnode.testnet.sui.io:443';
 
 // Contract configuration (to be updated after deployment)
 export const FARMING_CONTRACT = {
@@ -14,8 +14,9 @@ export const FARMING_CONTRACT = {
 
 // Initialize client
 export function getInvestmentClient() {
-  // Try OneChain first, fallback to Sui testnet
-  return new SuiClient({ url: SUI_TESTNET_RPC });
+  // Use the centralized RPC configuration
+  const rpcUrl = getRpcUrl();
+  return new SuiClient({ url: rpcUrl });
 }
 
 // Investment transaction types
@@ -220,5 +221,23 @@ export function formatTransaction(digest: string): string {
 
 // Get explorer URL for transaction
 export function getExplorerUrl(digest: string, network = 'testnet'): string {
+  // Check if we're on OneChain network
+  const isOneChain = typeof window !== 'undefined' && 
+    window.localStorage?.getItem('wallet_network') === 'onechain';
+  
+  // For mock transactions, indicate they're demo transactions
+  if (digest.startsWith('INV_') || digest.startsWith('WD_') || digest.startsWith('HRV_') || 
+      digest.startsWith('OCT_') || digest.startsWith('SUI_')) {
+    // These are demo transactions
+    if (isOneChain) {
+      return getOneChainExplorerUrl(digest);
+    }
+    return `https://suiscan.xyz/${network}/tx/${digest}`;
+  }
+  
+  // For real transactions
+  if (isOneChain) {
+    return getOneChainExplorerUrl(digest);
+  }
   return `https://suiscan.xyz/${network}/tx/${digest}`;
 }

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import contractAddresses from '@/contracts/addresses.json'
 
 // Mock farm data structure that matches the real contract data
 // In production, this would fetch from the blockchain
@@ -14,7 +13,6 @@ export async function GET(request: NextRequest) {
     const farmData = {
       message: "Live field data with DeFi metrics retrieved successfully.",
       timestamp: new Date().toISOString(),
-      contractAddresses: contractAddresses,
       fields: [
         {
           field_id: "F1",

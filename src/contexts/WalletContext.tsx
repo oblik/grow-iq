@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { useCurrentAccount, useCurrentWallet, useSuiClientQuery, useDisconnectWallet } from '@mysten/dapp-kit'
+import { useCurrentAccount, useCurrentWallet, useSuiClientQuery, useDisconnectWallet, useSuiClient } from '@mysten/dapp-kit'
 import { formatAddress } from '@mysten/sui/utils'
 
 interface WalletContextType {
@@ -19,20 +19,34 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined)
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const currentAccount = useCurrentAccount()
   const currentWallet = useCurrentWallet()
+  const client = useSuiClient()
   const { mutate: disconnectWallet } = useDisconnectWallet()
   const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
   const [balance, setBalance] = useState('0')
 
-  // Query balance when account is connected
-  const { data: balanceData } = useSuiClientQuery(
-    'getBalance',
+  // Query all balances when account is connected
+  const { data: allBalances } = useSuiClientQuery(
+    'getAllBalances',
     {
       owner: currentAccount?.address || '',
-      coinType: '0x2::sui::SUI', // Using SUI for testnet
     },
     {
       enabled: !!currentAccount?.address,
+      refetchInterval: 5000, // Refetch every 5 seconds
+    }
+  )
+  
+  // Also query SUI balance specifically
+  const { data: suiBalance } = useSuiClientQuery(
+    'getBalance',
+    {
+      owner: currentAccount?.address || '',
+      coinType: '0x2::sui::SUI',
+    },
+    {
+      enabled: !!currentAccount?.address,
+      refetchInterval: 5000,
     }
   )
 
@@ -46,17 +60,48 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [currentAccount])
 
+  // Update balance from all available sources
   useEffect(() => {
-    if (balanceData) {
-      // Convert from MIST to SUI (1 SUI = 1e9 MIST)
-      const suiBalance = Number(balanceData.totalBalance) / 1e9
-      setBalance(suiBalance.toFixed(4))
+    if (allBalances && allBalances.length > 0) {
+      
+      // Find SUI balance
+      const suiCoin = allBalances.find(b => b.coinType === '0x2::sui::SUI')
+      if (suiCoin) {
+        const suiAmount = Number(suiCoin.totalBalance) / 1e9
+        setBalance(suiAmount.toFixed(4))
+      } else {
+        // If no SUI, check for any other balance
+        const firstBalance = allBalances[0]
+        const amount = Number(firstBalance.totalBalance) / 1e9
+        setBalance(amount.toFixed(4))
+      }
+    } else if (suiBalance) {
+      // Fallback to specific SUI balance query
+      const suiAmount = Number(suiBalance.totalBalance) / 1e9
+      setBalance(suiAmount.toFixed(4))
     }
-  }, [balanceData])
+  }, [allBalances, suiBalance])
+  
+  // Also fetch balance manually when account changes
+  useEffect(() => {
+    if (currentAccount?.address && client) {
+      // Manual balance fetch as backup
+      client.getAllBalances({ owner: currentAccount.address })
+        .then(balances => {
+          if (balances.length > 0) {
+            const suiCoin = balances.find(b => b.coinType === '0x2::sui::SUI')
+            if (suiCoin) {
+              const amount = Number(suiCoin.totalBalance) / 1e9
+              setBalance(amount.toFixed(4))
+            }
+          }
+        })
+        .catch(err => console.error('Error fetching balance:', err))
+    }
+  }, [currentAccount?.address, client])
 
   const connect = () => {
     // Wallet connection is handled by the dapp-kit ConnectButton
-    console.log('Connect wallet through OneChain wallet button')
   }
 
   const disconnect = () => {
