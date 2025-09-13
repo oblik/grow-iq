@@ -1,0 +1,251 @@
+{
+  "info": {
+    "_postman_id": "774506e7-3cdc-42c3-9be0-f3c8d0ddfdf0",
+    "name": "GrowIQ API Collection",
+    "description": "Complete API collection for GrowIQ Dashboard - Agricultural IoT and DeFi Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": "Base URL for the GrowIQ API"
+    },
+    {
+      "key": "openai_api_key",
+      "value": "",
+      "type": "string",
+      "description": "OpenAI API Key for chat functionality"
+    },
+    {
+      "key": "user_address",
+      "value": "0x1234567890abcdef",
+      "type": "string",
+      "description": "User wallet address for blockchain interactions"
+    },
+    {
+      "key": "pool_id",
+      "value": "0",
+      "type": "string",
+      "description": "Default pool ID for farming operations"
+    },
+    {
+      "key": "stake_amount",
+      "value": "1000",
+      "type": "string",
+      "description": "Default stake amount in GUI tokens"
+    },
+    {
+      "key": "field_id",
+      "value": "F1",
+      "type": "string",
+      "description": "Default field ID for queries"
+    }
+  ],
+  "item": [
+    {
+      "name": "Farming API",
+      "description": "farming related endpoints",
+      "item": [
+        {
+          "name": "Get Farm Data",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/farming",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "farming"
+              ],
+              "query": [
+                {
+                  "key": "poolId",
+                  "value": "{{poolId}",
+                  "description": "poolId parameter"
+                },
+                {
+                  "key": "address",
+                  "value": "{{address}",
+                  "description": "address parameter"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "_postman_isSubFolder": false
+        },
+        {
+          "name": "Farm Action",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/farming",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "farming"
+              ],
+              "query": [
+                {
+                  "key": "poolId",
+                  "value": "{{poolId}",
+                  "description": "poolId parameter"
+                },
+                {
+                  "key": "address",
+                  "value": "{{address}",
+                  "description": "address parameter"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key\": \"value\"\n}"
+            }
+          },
+          "response": [],
+          "_postman_isSubFolder": false
+        }
+      ]
+    },
+    {
+      "name": "Chat API",
+      "description": "chat related endpoints",
+      "item": [
+        {
+          "name": "Send Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chat",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chat"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": \"{{messages}}\",\n  \"userMessage\": \"{{userMessage}}\",\n  \"farmContext\": \"{{farmContext}}\"\n}"
+            }
+          },
+          "response": [],
+          "_postman_isSubFolder": false
+        }
+      ]
+    },
+    {
+      "name": "Test Scenarios",
+      "description": "Automated test scenarios",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/farming",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "farming"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Error Handling Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"invalid_action\",\n  \"poolId\": 999\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/farming",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "farming"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-generated pre-request script",
+          "pm.environment.set(\"timestamp\", new Date().toISOString());",
+          "",
+          "// Log request details",
+          "console.log(\"Request:\", pm.request.method, pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-generated test script",
+          "pm.test(\"Response time is acceptable\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});",
+          "",
+          "pm.test(\"Response has valid content type\", function () {",
+          "    const contentType = pm.response.headers.get(\"Content-Type\");",
+          "    if (contentType) {",
+          "        pm.expect(contentType).to.include(\"application/json\");",
+          "    }",
+          "});",
+          "",
+          "if (pm.response.code === 200) {",
+          "    pm.test(\"Response has valid JSON body\", function () {",
+          "        pm.response.to.have.jsonBody();",
+          "    });",
+          "}"
+        ]
+      }
+    }
+  ]
+}

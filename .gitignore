@@ -74,3 +74,6 @@ logs/
 *.temp
 tmp/
 temp/
+
+# Postman sync state
+.postman-sync-state.json
